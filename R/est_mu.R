@@ -1,7 +1,8 @@
+#' Function to estimate mu value
 #' @param H height
-#'
 #' @param d depth
 #'
+#' @returns mu
 #' @export
 est_mu <- function(H, d){
   if(H/d > 0.94){

@@ -1,4 +1,9 @@
-
+#'
+#'
+#'
+#'
+#'
+#'
 # a function to run stochasim using rain hydrographs
 stochasim_rain <- function(floods_rain, Q_base, n, d84, d50, width_0, slope, H) {
   rv_rate <- 0.1

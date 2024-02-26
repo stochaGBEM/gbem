@@ -1,6 +1,12 @@
-#the functions used to set up stochasim
+#' Generate a sequence of floods to run the simulations based on the
+#' specified GEV distributions
+#'
+#' @param gev Specify a GEV
+#' @param n_floods description
+#'
+#' @export
 make_floods <- function(gev, n_floods){
-  #specify a GEV
+
   floods <- extRemes::revd(
     n = n_floods,
     loc = gev[1],

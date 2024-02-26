@@ -1,5 +1,16 @@
-
-# a function to run stochasim using snow hydrographs
+#' Function to run stochasim using snow hydrographs
+#'
+#' @param floods_snow The output from make_floods
+#' @param floods_rain The output from make_floods
+#' @param Q_base Mean annual flow
+#' @param n Manning's n value for the main channel
+#' @param d84 84th percentile of the surface grain size distribution (mm)
+#' @param d50 50th percentile of the grain size distribution (mm)
+#' @param width_0 Water surface width at the beginning of time interval T
+#' @param slope Energy gradient of the stream channel
+#' @param H Effective rooting depth for vegetation
+#'
+#' @export
 stochasim_snow <- function(floods_snow, Q_base, n, d84, d50, width_0, slope, H) {
   rv_rate <- 0.1
   #calculate some constants

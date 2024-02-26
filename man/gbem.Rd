@@ -4,14 +4,28 @@
 \alias{gbem}
 \title{Main GBEM Workhorse}
 \usage{
-gbem(Q, t, n, D84, D50, W, S, H = 0)
+gbem(Q, t, n, d84, d50, W, S, H = 0)
 }
 \arguments{
-\item{Q}{discharge carried by the stream}
+\item{Q}{Discharge carried by the stream}
 
-\item{t}{time for which Q acts on the stream channel (hrs)}
+\item{t}{Time for which Q acts on the stream channel (hrs)}
 
-\item{name}{description}
+\item{n}{Manning's n value for the main channel}
+
+\item{d84}{84th percentile of the surface grain size distribution (mm)}
+
+\item{d50}{50th percentile of the grain size distribution (mm)}
+
+\item{W}{Water surface width at the beginning of time interval T}
+
+\item{S}{Energy gradient of the stream channel}
+
+\item{H}{Effective rooting depth for vegetation -
+grassy banks, no trees / shrubs H = 0.35
+1 to 5\% tree / shrub cover H = 0.50
+5 to 50\% tree / shrub cover H =  0.90
+more than 50\% tree / shrub cover H = 1.1 description}
 }
 \value{
 description
