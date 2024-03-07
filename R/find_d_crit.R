@@ -1,6 +1,5 @@
 #' Calculates the critical threshold for channel widening
 #'
-#' @param Q Discharge carried by the stream, single numeric
 #' @param H Effective rooting depth for vegetation, single numeric
 #' @param t_c84
 #' @param S Energy gradient of the stream channel, single numeric
@@ -8,12 +7,12 @@
 #' gbem:::find_d_crit(100, 0.35, 0.5, 0.01)
 #'
 #' @returns Critical threshold for channel widening
-find_d_crit <- function(Q, H, t_c84, S){
+find_d_crit <- function(H, t_c84, S){
 
   #step 0: define constants and sub functions
   g <- 9.81
   rho <- 1000
-  tol = 0.001
+  tol <- 0.001
 
   d_crit <- t_c84 / (g * rho * S)  # max depth that can be maintained (no veg)
 

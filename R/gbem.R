@@ -33,7 +33,7 @@ gbem <- function(Q, t, n, d84, d50, W, S, H = 0) {
 
     #step 1: calculate the critical threshold for channel widening
     t_c84 <- shields_c84 * g * (rho_s - rho) * (d84 / 1000)
-    d_crit <- find_d_crit(Q, H, t_c84, S)
+    d_crit <- find_d_crit(H, t_c84, S)
     v_crit <- d_crit^(2/3) * S^(1/2) / n
 
     #step 2: determine if channel will widen and calculate transp, widening
@@ -60,7 +60,12 @@ gbem <- function(Q, t, n, d84, d50, W, S, H = 0) {
 
     # step 3: return the predicted widening, widening constrained by vb,
     # transp. volume, stable depth
-    return(c(dw_pred, dw_const, v_b, d_crit))
+
+    # dw_const = change in width constrained by transport capacity, the most
+    # important thing here.
+    # v_b = transport capacity * time. volume of transport that can be moved by the river.
+
+    list(dw_pred, dw_const, v_b)
 }
 
 

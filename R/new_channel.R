@@ -20,7 +20,7 @@
 #' - more than 50% tree / shrub cover: `rootdepth = 1.10`.
 #' @returns A `"channel"` object.
 #' @export
-channel <- function(width, grad, d50, d84, roughness, rootdepth = 0) {
+cross_section <- function(width, grad, d50, d84, roughness, rootdepth = 0) {
   l <- list(width = width,
             grad = grad,
             d50 = d50,
