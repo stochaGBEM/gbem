@@ -10,6 +10,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gbem)](https://CRAN.R-project.org/package=gbem)
 [![R-CMD-check](https://github.com/stochaGBEM/gbem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/stochaGBEM/gbem/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/stochaGBEM/gbem/branch/main/graph/badge.svg)](https://app.codecov.io/gh/stochaGBEM/gbem?branch=main)
 <!-- badges: end -->
 
 The goal of gbem is to calculate erosion volumes expected at a river’s
