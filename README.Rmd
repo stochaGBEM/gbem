@@ -20,37 +20,20 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/gbem)](https://CRAN.R-project.org/package=gbem)
 <!-- badges: end -->
 
-The goal of gbem is to ...
+The goal of gbem is to calculate erosion volumes expected at a river's cross section, given flow magnitude and duration. 
 
 ## Installation
 
-You can install the development version of gbem like so:
+As gbem is not on CRAN, you can install it from GitHub by running the following command in R:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+remotes::install_github("stochaGBEM/gbem")
 ```
+
+If this doesn't work, you may have to install the remotes package with the command `install.packages("remotes")`.
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
 ```{r example}
 library(gbem)
-## basic example code
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.

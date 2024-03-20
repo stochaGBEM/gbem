@@ -17,7 +17,7 @@ gbem(Q, t, n, d84, d50, W, S, H = 0)
 
 \item{d50}{50th percentile of the grain size distribution (mm)}
 
-\item{W}{Water surface width at the beginning of time interval T}
+\item{W}{Water surface width at the beginning of time interval T (m)}
 
 \item{S}{Energy gradient of the stream channel}
 

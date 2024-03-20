@@ -4,11 +4,9 @@
 \alias{find_d_crit}
 \title{Calculates the critical threshold for channel widening}
 \usage{
-find_d_crit(Q, H, t_c84, S)
+find_d_crit(H, t_c84, S)
 }
 \arguments{
-\item{Q}{Discharge carried by the stream, single numeric}
-
 \item{H}{Effective rooting depth for vegetation, single numeric}
 
 \item{S}{Energy gradient of the stream channel, single numeric}
