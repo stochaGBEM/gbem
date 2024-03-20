@@ -12,6 +12,5 @@ find_q_b <- function(d, n, d50, S){
   om_star <- ( g * rho * d^(5/3) * S^(3/2) / n ) / (rho * (g * Gs * d50)^(3/2))
   om_crit <- sheilds_c50^(3/2) * d_threshold^(1/6)/(n * g^(1/2))
   E_star <- (0.92 - 0.25 * sqrt(om_crit / om_star))^9
-  qb <- E_star * d * velocity * S / Gs
-  return(qb)
+  E_star * d * velocity * S / Gs
 }

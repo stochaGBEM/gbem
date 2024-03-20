@@ -23,6 +23,8 @@ snow_hydrograph(Q, baseflow, n, d84, d50, W, S, H = 0, raw = FALSE)
 \item{S}{Energy gradient of the stream channel}
 
 \item{H}{Effective rooting depth for vegetation}
+
+\item{raw}{Logical; return the raw data from the analysis?}
 }
 \value{
 Parameters of the flood event to create a hydrograph with

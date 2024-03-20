@@ -9,6 +9,7 @@
 #' @param W Water surface width at the beginning of time interval T
 #' @param S Energy gradient of the stream channel
 #' @param H Effective rooting depth for vegetation
+#' @param raw Logical; return the raw data from the analysis?
 #'
 #' @returns Parameters of the flood event to create a hydrograph with
 #' @export

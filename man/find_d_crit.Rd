@@ -9,6 +9,8 @@ find_d_crit(H, t_c84, S)
 \arguments{
 \item{H}{Effective rooting depth for vegetation, single numeric}
 
+\item{t_c84}{foo}
+
 \item{S}{Energy gradient of the stream channel, single numeric}
 }
 \value{
@@ -18,6 +20,6 @@ Critical threshold for channel widening
 Calculates the critical threshold for channel widening
 }
 \examples{
-gbem:::find_d_crit(100, 0.35, 0.5, 0.01)
+gbem:::find_d_crit(0.35, 0.5, 0.01)
 
 }

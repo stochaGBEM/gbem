@@ -9,7 +9,7 @@
 #' @param width_0 Water surface width at the beginning of time interval T
 #' @param slope Energy gradient of the stream channel
 #' @param H Effective rooting depth for vegetation
-#'
+#' @rdname stochasim_rainsnow
 #' @export
 stochasim_snow <- function(floods_snow, Q_base, n, d84, d50, width_0, slope, H) {
   rv_rate <- 0.1

@@ -20,15 +20,7 @@
 #' @export
 gbem <- function(Q, t, n, d84, d50, W, S, H = 0) {
 
-    #step 0: define constants and sub functions
-    g <- 9.81
-    rho_s <- 2650
-    rho <- 1000
-    shields_c84 <- 0.02
-    sheilds_c50 <- 0.045
-    hour_2_seconds <- 60 * 60
-    travel_angle <- 30 #the fahrboschung angle for small failures in sand/gravel (ranges from 30 to 35 most likely)
-    tol = 0.001
+
 
 
     #step 1: calculate the critical threshold for channel widening

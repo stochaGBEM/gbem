@@ -1,10 +1,4 @@
-#'
-#'
-#'
-#'
-#'
-#'
-# a function to run stochasim using rain hydrographs
+#' @rdname stochasim_rainsnow
 stochasim_rain <- function(floods_rain, Q_base, n, d84, d50, width_0, slope, H) {
   rv_rate <- 0.1
   #calculate some constants
