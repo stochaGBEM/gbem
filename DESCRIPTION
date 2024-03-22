@@ -18,11 +18,13 @@ Description: The goal of gbem is to calculate erosion volumes expected
     at a river's cross section, given flow magnitude and duration. 
 License: CC BY-NC 4.0
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tibble
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Imports: 
     extRemes,
-    stats
+    stats,
+    vctrs

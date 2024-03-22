@@ -17,11 +17,11 @@
 #' more than 50% tree / shrub cover H = 1.1 description
 #'
 #' @returns description
+#' @examples
+#' gbem(100, 10, 0.02, 1, 0.5, 5, 0.1)
+#'
 #' @export
 gbem <- function(Q, t, n, d84, d50, W, S, H = 0) {
-
-
-
 
     #step 1: calculate the critical threshold for channel widening
     t_c84 <- shields_c84 * g * (rho_s - rho) * (d84 / 1000)
@@ -29,7 +29,7 @@ gbem <- function(Q, t, n, d84, d50, W, S, H = 0) {
     v_crit <- d_crit^(2/3) * S^(1/2) / n
 
     #step 2: determine if channel will widen and calculate transp, widening
-    d <- ( (n * Q) / (W * S^(1/2)) )^(3/5)
+    d <- ( (n * Q) / (W * sqrt(S)) )^(3/5)
     stable <- d < d_crit
     if(stable) {
       dw_pred <- 0

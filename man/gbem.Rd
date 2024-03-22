@@ -34,3 +34,7 @@ description
 Core function of gravel-bed river bank erosion model,
 this is intended to become the work horse function for STOCHASIM and SGBEM
 }
+\examples{
+gbem(100, 10, 0.02, 1, 0.5, 5, 0.1)
+
+}

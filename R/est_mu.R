@@ -1,16 +1,19 @@
-#' Function to estimate mu value
-#' @param H height
-#' @param d depth
+#' Estimate mu value
 #'
-#' @returns mu
+#' @param H Bank height ??? (meters???); numeric vector.
+#' @param d Water depth ??? (meters???); numeric vector.
+#'
+#' @returns Vector of `mu` values.
+#' @examples
+#' est_mu(5, 2)
+#'
 #' @export
 est_mu <- function(H, d){
-  if(H/d > 0.94){
-    mu <- 4  #set an upper threshold of 4
-  } else {
-    a = 0.85
-    b = 0.87
-    mu = 1 / (1 - a*(H/d))^b  #from Eaton and Millar 2017
-  }
-  return(mu)
+  Hd <- vctrs::vec_recycle_common(H, d)
+  H <- Hd[[1]]
+  d <- Hd[[2]]
+  p <- pmin(H / d, 0.9374073)
+  a <- 0.85
+  b <- 0.87
+  1 / (1 - a * p)^b
 }

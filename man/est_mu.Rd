@@ -2,18 +2,22 @@
 % Please edit documentation in R/est_mu.R
 \name{est_mu}
 \alias{est_mu}
-\title{Function to estimate mu value}
+\title{Estimate mu value}
 \usage{
 est_mu(H, d)
 }
 \arguments{
-\item{H}{height}
+\item{H}{Bank height ??? (meters???); numeric vector.}
 
-\item{d}{depth}
+\item{d}{Water depth ??? (meters???); numeric vector.}
 }
 \value{
-mu
+Vector of \code{mu} values.
 }
 \description{
-Function to estimate mu value
+Estimate mu value
+}
+\examples{
+est_mu(5, 2)
+
 }
