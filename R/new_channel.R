@@ -1,6 +1,6 @@
-#' Create a new Channel
+#' Create a new channel cross section
 #'
-#' Create a channel by specifying its properties.
+#' Create a channel cross section by specifying its properties.
 #'
 #' @param width Channel width in meters; single positive numeric.
 #' @param grad Energy gradient of the stream channel; single positive numeric.
@@ -9,8 +9,7 @@
 #' @param roughness Manning's roughness; positive single numeric.
 #' @param rootdepth Effective rooting depth for vegetation; single non-negative
 #' numeric.
-#' @note Width is assumed constant as a function of depth (might eventually
-#' create a subclass for these simple channels).
+#' @note Width is assumed constant as a function of depth.
 #' @details
 #' Examples of effective rooting depth for vegetation, `rootdepth`, are:
 #'
@@ -18,7 +17,7 @@
 #' - 1 to 5% tree / shrub cover: `rootdepth = 0.50`.
 #' - 5 to 50% tree / shrub cover: `rootdepth = 0.90`.
 #' - more than 50% tree / shrub cover: `rootdepth = 1.10`.
-#' @returns A `"channel"` object.
+#' @returns A `"cross_section"` object.
 #' @export
 cross_section <- function(width, grad, d50, d84, roughness, rootdepth = 0) {
   l <- list(width = width,
@@ -27,51 +26,51 @@ cross_section <- function(width, grad, d50, d84, roughness, rootdepth = 0) {
             d84 = d84,
             roughness = roughness,
             rootdepth = rootdepth)
-  res <- new_channel(l)
-  validate_channel(res)
+  res <- new_cross_section(l)
+  validate_cross_section(res)
 }
 
-#' Validator function for channel objects
+#' Validator function for cross_section objects
 #'
-#' Checks that an object of class `"channel"` has a valid structure and valid
-#' channel properties.
+#' Checks that an object of class `"cross_section"` has a valid
+#' structure and valid cross section properties.
 #'
-#' @param channel Object of class `"channel"`.
-#' @returns Returns the original `channel` object. Note that this function is
+#' @param cross_section Object of class `"cross_section"`.
+#' @returns Returns the original `cross_section` object. Note that this function is
 #' intended to be run for its side effects: namely, throwing an error if the
-#' channel is invalid.
-validate_channel <- function(channel) {
-  lengths <- vapply(channel, length, FUN.VALUE = integer(1L))
+#' cross_section is invalid.
+validate_cross_section <- function(cross_section) {
+  lengths <- vapply(cross_section, length, FUN.VALUE = integer(1L))
   if (any(lengths != 1)) {
-    stop("Channel properties must be single numerics. The following are not:",
-         paste(names(channel)[lengths != 1], collapse = ", "), ".")
+    stop("Cross Section properties must be single numerics. The following are not:",
+         paste(names(cross_section)[lengths != 1], collapse = ", "), ".")
   }
-  if (channel$width <= 0) {
-    stop("Channel must have a postive width.")
+  if (cross_section$width <= 0) {
+    stop("Cross Section must have a postive width.")
   }
-  if (channel$grad <= 0) {
-    stop("Channel must have a postive energy gradient (`grad`).")
+  if (cross_section$grad <= 0) {
+    stop("Cross Section must have a postive energy gradient (`grad`).")
   }
-  if (channel$d84 < channel$d50) {
+  if (cross_section$d84 < cross_section$d50) {
     stop("Invalid grain size distribution: cannot have d84 < d50.")
   }
-  if (channel$roughness <= 0) {
+  if (cross_section$roughness <= 0) {
     stop("Manning's roughness must be positive.")
   }
-  if (channel$rootdepth < 0) {
+  if (cross_section$rootdepth < 0) {
     stop("Effective rooting depth for vegetation (`rootdepth`) cannot be ",
          "negative.")
   }
-  channel
+  cross_section
 }
 
-#' Constructor function for channel objects
+#' Constructor function for cross_section objects
 #'
-#' @param l List containing the components of a channel object.
+#' @param l List containing the components of a cross_section object.
 #' @param ... Attributes to add to the object.
 #' @param class If making a subclass, specify its name here.
-#' @returns An object of class `"channel"`, although not necessarily with
+#' @returns An object of class `"cross_section"`, although not necessarily with
 #' valid properties.
-new_channel <- function(l, ..., class = character()) {
-  structure(l, class = c(class, "channel"))
+new_cross_section <- function(l, ..., class = character()) {
+  structure(l, class = c(class, "cross_section"))
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/new_channel.R
 \name{cross_section}
 \alias{cross_section}
-\title{Create a new Channel}
+\title{Create a new channel cross section}
 \usage{
 cross_section(width, grad, d50, d84, roughness, rootdepth = 0)
 }
@@ -20,10 +20,10 @@ millimeters; single positive numerics.}
 numeric.}
 }
 \value{
-A \code{"channel"} object.
+A \code{"cross_section"} object.
 }
 \description{
-Create a channel by specifying its properties.
+Create a channel cross section by specifying its properties.
 }
 \details{
 Examples of effective rooting depth for vegetation, \code{rootdepth}, are:
@@ -35,6 +35,5 @@ Examples of effective rooting depth for vegetation, \code{rootdepth}, are:
 }
 }
 \note{
-Width is assumed constant as a function of depth (might eventually
-create a subclass for these simple channels).
+Width is assumed constant as a function of depth.
 }
