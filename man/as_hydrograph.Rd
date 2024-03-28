@@ -7,7 +7,7 @@
 \usage{
 as_hydrograph(x, ...)
 
-\method{as_hydrograph}{data.frame}(x, times_from, flows_from, unit = 1)
+\method{as_hydrograph}{data.frame}(x, ..., times_from, flows_from, unit = 1)
 }
 \arguments{
 \item{x}{A data frame to coerce to a hydrograph.}

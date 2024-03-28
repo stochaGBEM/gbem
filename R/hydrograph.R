@@ -37,7 +37,7 @@ hydrograph <- function(..., unit = 1, env = rlang::caller_env()) {
   if (any(duplicated(timing))) {
     stop("Each time point must be unique.")
   }
-  f <- approxfun(timing, flows)
+  f <- stats::approxfun(timing, flows)
   h <- new_hydrograph(f, times = range(timing), peak = max(flows))
   validate_hydrograph(h)
 }
@@ -68,8 +68,10 @@ validate_hydrograph <- function(hydrograph) {
 #' event hydrograph (numeric).
 #' @param peak Magnitude of the peak discharge in the event hydrograph;
 #' single numeric.
+#' @param ... Attributes to add.
+#' @param class If making a subclass, specify its name here.
 #' @returns Object of class "hydrograph".
 new_hydrograph <- function(fun, times, peak, ..., class = character()) {
-  structure(fun, times = times, peak = peak, class = c(class, "hydrograph"))
+  structure(fun, ..., times = times, peak = peak, class = c(class, "hydrograph"))
 }
 

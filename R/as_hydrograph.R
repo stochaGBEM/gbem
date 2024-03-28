@@ -23,12 +23,12 @@ as_hydrograph <- function(x, ...) {
 
 #' @rdname as_hydrograph
 #' @export
-as_hydrograph.data.frame <- function(x, times_from, flows_from, unit = 1) {
+as_hydrograph.data.frame <- function(x, ..., times_from, flows_from, unit = 1) {
   times <- rlang::enquo(times_from)
   flows <- rlang::enquo(flows_from)
   times <- rlang::eval_tidy(times, data = x) * unit
   flows <- rlang::eval_tidy(flows, data = x)
-  f <- approxfun(times, flows)
+  f <- stats::approxfun(times, flows)
   h <- new_hydrograph(f, times = range(times), peak = max(flows))
   validate_hydrograph(h)
 }

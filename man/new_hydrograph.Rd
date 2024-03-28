@@ -14,6 +14,10 @@ event hydrograph (numeric).}
 
 \item{peak}{Magnitude of the peak discharge in the event hydrograph;
 single numeric.}
+
+\item{...}{Attributes to add.}
+
+\item{class}{If making a subclass, specify its name here.}
 }
 \value{
 Object of class "hydrograph".
