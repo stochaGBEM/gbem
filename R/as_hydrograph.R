@@ -32,3 +32,15 @@ as_hydrograph.data.frame <- function(x, times_from, flows_from, unit = 1) {
   h <- new_hydrograph(f, times = range(times), peak = max(flows))
   validate_hydrograph(h)
 }
+
+#' Test if an object is a hydrograph
+#'
+#' Returns `TRUE` if an object inherits the class `"hydrograph"`, and
+#' `FALSE` otherwise.
+#'
+#' @param x An object.
+#' @returns `TRUE` if an object inherits the class `"hydrograph"`.
+#' @export
+is_hydrograph <- function(x) {
+  inherits(x, "hydrograph")
+}

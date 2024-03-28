@@ -34,6 +34,9 @@ hydrograph <- function(..., unit = 1, env = rlang::caller_env()) {
                    FUN.VALUE = numeric(1L))
   flows <- lefts
   timing <- rights * unit
+  if (any(duplicated(timing))) {
+    stop("Each time point must be unique.")
+  }
   f <- approxfun(timing, flows)
   h <- new_hydrograph(f, times = range(timing), peak = max(flows))
   validate_hydrograph(h)
