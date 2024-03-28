@@ -39,3 +39,63 @@ If this doesn't work, you may have to install the remotes package with the comma
 ```{r example}
 library(gbem)
 ```
+
+### Hydrographs
+
+Make a hydrograph from scratch:
+
+```{r}
+hg <- hydrograph(
+  2 ~ 0, 3 ~ 1, 5 ~ 2, 3 ~ 5, 2 ~ 10
+)
+plot(hg)
+```
+
+Or, from a data frame; this time, also specify a time multiplier:
+
+```{r}
+data.frame(times = c(0, 1 / 3, 1), flow = c(100, 500, 200)) |> 
+  as_hydrograph(times_from = times, flows_from = flow, unit = 24) |> 
+  plot()
+```
+
+There are canned hydrographs for snowmelt-related and rainfall-related events, too:
+
+```{r}
+hydrograph_rain(peak = 200, baseflow = 50) |> 
+  plot()
+hydrograph_snow(peak = 200, baseflow = 50) |> 
+  plot()
+```
+
+You can easily discretize the hydrograph if you'd like to do manual calculations:
+
+```{r}
+discretize_hydrograph(hg, 10)
+```
+
+### Cross Sections
+
+Make a channel cross section:
+
+```{r}
+cs <- cross_section(width = 3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
+cs
+```
+
+### Gravel-bed river bank erosion model
+
+Execute the algorithm for a constant flow by running `gbem()`. That returns a gbem object containing information about channel changes. Run `erode()` to execute the changes to get a new cross section:
+
+```{r}
+g1 <- gbem(100, t = 1, cross_section = cs)
+erode(g1)
+```
+
+You can also iterate GBEM across a hydrograph. 
+
+```{r}
+g2 <- gbem2(hg, cross_section = cs, niter = 100)
+erode(g2)
+```
+
