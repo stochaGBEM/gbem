@@ -9,5 +9,5 @@
 #' @export
 plot.hydrograph <- function(x, ..., ylab = "Discharge", xlab = "Time") {
   r <- range(x)
-  curve(x, from = r[1], to = r[2], xlab = xlab, ylab = ylab, ...)
+  graphics::curve(x, from = r[1], to = r[2], xlab = xlab, ylab = ylab, ...)
 }

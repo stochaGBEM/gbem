@@ -13,7 +13,7 @@
 #' linearly interpolated discharge-timing pairs.
 #' @examples
 #' df <- data.frame(when = 0:3, flows = c(2, 5, 4, 2))
-#' h <- as_hydrograph(df, when, flows)
+#' h <- as_hydrograph(df, times_from = when, flows_from = flows)
 #' plot(h)
 #' @rdname as_hydrograph
 #' @export
