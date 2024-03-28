@@ -17,7 +17,3 @@ Vector of \code{mu} values.
 \description{
 Estimate mu value
 }
-\examples{
-est_mu(5, 2)
-
-}

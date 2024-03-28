@@ -3,16 +3,13 @@
 #' @param d Depth
 #' @param S Energy gradient of the stream channel
 #' @param D84 84th percentile of the surface grain size distribution (mm)
-#'
 #' @returns n value
-#' @export
 ferguson_n <-  function(d, S, D84){
   g <- 9.81
-  D84 <- D84/1000
+  D84 <- D84 / 1000
   a1 <- 6.5
   a2 <- 2.5
-  Res <- a1*a2*(d/D84) / (a1^2 + a2^2*(d/D84)^(5/3))^(1/2)
+  Res <- a1 * a2 * (d / D84) / sqrt(a1^2 + a2^2 * (d / D84)^(5 / 3))
   U <- Res * sqrt(g * d * S)
-  n <- d^(2/3) * S^(1/2) / U
-  return(n)
+  d^(2 / 3) * sqrt(S) / U
 }

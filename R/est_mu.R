@@ -4,10 +4,6 @@
 #' @param d Water depth ??? (meters???); numeric vector.
 #'
 #' @returns Vector of `mu` values.
-#' @examples
-#' est_mu(5, 2)
-#'
-#' @export
 est_mu <- function(H, d){
   Hd <- vctrs::vec_recycle_common(H, d)
   H <- Hd[[1]]

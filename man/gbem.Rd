@@ -4,37 +4,33 @@
 \alias{gbem}
 \title{Main GBEM Workhorse}
 \usage{
-gbem(Q, t, n, d84, d50, W, S, H = 0)
+gbem(Q, t, cross_section)
 }
 \arguments{
 \item{Q}{Discharge carried by the stream}
 
 \item{t}{Time for which Q acts on the stream channel (hrs)}
 
-\item{n}{Manning's n value for the main channel}
-
-\item{d84}{84th percentile of the surface grain size distribution (mm)}
-
-\item{d50}{50th percentile of the grain size distribution (mm)}
-
-\item{W}{Water surface width at the beginning of time interval T (m)}
-
-\item{S}{Energy gradient of the stream channel}
-
-\item{H}{Effective rooting depth for vegetation -
-grassy banks, no trees / shrubs H = 0.35
-1 to 5\% tree / shrub cover H = 0.50
-5 to 50\% tree / shrub cover H =  0.90
-more than 50\% tree / shrub cover H = 1.1 description}
+\item{cross_section}{A \code{"cross_section"} object.}
 }
 \value{
-description
+A list of the following components:
+\itemize{
+\item \code{dw_pred}: predicted widening.
+\item \code{dw_const}: change in width constrained by transport capacity, the most
+\item \code{v_b}: transport capacity * time. Volume of transport that can be moved
+by the river.
+\item \code{cross_section}: The original cross section.
+}
 }
 \description{
-Core function of gravel-bed river bank erosion model,
-this is intended to become the work horse function for STOCHASIM and SGBEM
+Run the gravel-bed river bank erosion model to determine channel
+changes.
 }
 \examples{
-gbem(100, 10, 0.02, 1, 0.5, 5, 0.1)
-
+cs <- cross_section(5, grad = 0.01, d50 = 0.5, d84 = 0.5, roughness = 0.02)
+gbem(100, 1, cs)
+}
+\seealso{
+\code{\link[=erode]{erode()}}
 }

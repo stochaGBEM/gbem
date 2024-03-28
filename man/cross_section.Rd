@@ -37,3 +37,6 @@ Examples of effective rooting depth for vegetation, \code{rootdepth}, are:
 \note{
 Width is assumed constant as a function of depth.
 }
+\examples{
+cross_section(3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
+}

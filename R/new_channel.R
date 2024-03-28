@@ -17,6 +17,8 @@
 #' - 1 to 5% tree / shrub cover: `rootdepth = 0.50`.
 #' - 5 to 50% tree / shrub cover: `rootdepth = 0.90`.
 #' - more than 50% tree / shrub cover: `rootdepth = 1.10`.
+#' @examples
+#' cross_section(3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
 #' @returns A `"cross_section"` object.
 #' @export
 cross_section <- function(width, grad, d50, d84, roughness, rootdepth = 0) {
@@ -73,4 +75,10 @@ validate_cross_section <- function(cross_section) {
 #' valid properties.
 new_cross_section <- function(l, ..., class = character()) {
   structure(l, class = c(class, "cross_section"))
+}
+
+#' @exportS3Method base::print
+print.cross_section <- function(x, ...) {
+  ellipsis::check_dots_empty()
+  cat(paste0("Channel with width ", x$width))
 }

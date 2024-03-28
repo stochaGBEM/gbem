@@ -7,13 +7,16 @@
 find_q_b(d, n, d50, S)
 }
 \arguments{
-\item{d}{Flow depth (m)}
+\item{d}{Flow depth (m).}
 
-\item{n}{Manning's n value for the main channel}
+\item{n}{Manning's n value for the main channel.}
 
-\item{d50}{50th percentile of the grain size distribution (mm)}
+\item{d50}{50th percentile of the grain size distribution (mm).}
 
-\item{S}{Energy gradient of the stream channel}
+\item{S}{Energy gradient of the stream channel.}
+}
+\value{
+FILL_THIS_IN
 }
 \description{
 Determine if channel will widen and calculate transp, widening
