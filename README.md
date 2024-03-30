@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gbem
+# gbem <a href="https://stochagbem.github.io/gbem/"><img src="man/figures/logo.png" align="right" height="138" alt="gbem website" /></a>
 
 <!-- badges: start -->
 
