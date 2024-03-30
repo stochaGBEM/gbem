@@ -17,6 +17,9 @@ coverage](https://codecov.io/gh/stochaGBEM/gbem/branch/main/graph/badge.svg)](ht
 The goal of gbem is to calculate erosion volumes expected at a river’s
 cross section, given flow magnitude and duration.
 
+**WARNING**: This package is under active development and is not
+intended to be used yet.
+
 ## Installation
 
 As gbem is not on CRAN, you can install it from GitHub by running the
