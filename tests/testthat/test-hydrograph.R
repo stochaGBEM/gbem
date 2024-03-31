@@ -39,7 +39,7 @@ test_that("Duration of hydrograph works.", {
 test_that("Rain hydrographs work as expected.", {
   pk <- 5
   base <- 2
-  hg <- hydrograph_rain(pk, base, duration = 3)
+  hg <- hyd_rain(pk, base, duration = 3)
   expect_equal(hg(1), pk)
   expect_equal(hg(c(0, 3)), c(base, base))
   t <- c(1 - 1e-3, 1 + 1e-3)
@@ -49,7 +49,7 @@ test_that("Rain hydrographs work as expected.", {
 test_that("Snow hydrographs work as expected.", {
   pk <- 5
   base <- 2
-  hg <- hydrograph_snow(pk, base, duration = 6)
+  hg <- hyd_snow(pk, base, duration = 6)
   expect_equal(hg(2:3), c(pk, pk))
   expect_equal(hg(c(0, 6)), c(base, base))
   t <- c(2 - 1e-3, 3 + 1e-3)
