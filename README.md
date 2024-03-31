@@ -65,14 +65,14 @@ There are canned hydrographs for snowmelt-related and rainfall-related
 events, too:
 
 ``` r
-hydrograph_rain(peak = 200, baseflow = 50) |> 
+hyd_rain(peak = 200, baseflow = 50) |> 
   plot()
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 ``` r
-hydrograph_snow(peak = 200, baseflow = 50) |> 
+hyd_snow(peak = 200, baseflow = 50) |> 
   plot()
 ```
 
