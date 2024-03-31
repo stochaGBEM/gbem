@@ -23,7 +23,7 @@
 #'
 #' @rdname event_hydrographs
 #' @export
-hyd_snow <- function(peak, baseflow, duration = 3 * 24) {
+hyd_snow <- function(peak, baseflow, duration = 9 * 24) {
   hydrograph(
     baseflow ~ 0,
     peak ~ 1 / 3,
@@ -35,7 +35,7 @@ hyd_snow <- function(peak, baseflow, duration = 3 * 24) {
 
 #' @rdname event_hydrographs
 #' @export
-hyd_rain <- function(peak, baseflow, duration = 9 * 24) {
+hyd_rain <- function(peak, baseflow, duration = 3 * 24) {
   hydrograph(
     baseflow ~ 0,
     peak ~ 1 / 3,
