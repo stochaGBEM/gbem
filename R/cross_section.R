@@ -56,6 +56,12 @@ validate_cross_section <- function(cross_section) {
   if (cross_section$d84 < cross_section$d50) {
     stop("Invalid grain size distribution: cannot have d84 < d50.")
   }
+  if (cross_section$d84 < cross_section$d50) {
+    stop("Invalid grain size distribution: cannot have d84 < d50.")
+  }
+  if (cross_section$d50 <= 0) {
+    stop("Invalid grain size distribution: grain size must be positive.")
+  }
   if (cross_section$roughness <= 0) {
     stop("Manning's roughness must be positive.")
   }
