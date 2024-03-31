@@ -76,11 +76,13 @@ at each time step.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hg</span> <span class="op">&lt;-</span> <span class="fu"><a href="event_hydrographs.html">hydrograph_snow</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hg</span> <span class="op">&lt;-</span> <span class="fu">hydrograph_snow</span><span class="op">(</span><span class="fl">5</span>, <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in hydrograph_snow(5, 2):</span> could not find function "hydrograph_snow"</span>
 <span class="r-in"><span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="cross_section.html">cross_section</a></span><span class="op">(</span><span class="fl">3</span>, grad <span class="op">=</span> <span class="fl">0.01</span>, d50 <span class="op">=</span> <span class="fl">0.1</span>, d84 <span class="op">=</span> <span class="fl">0.5</span>, roughness <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">gbem2</span><span class="op">(</span><span class="va">hg</span>, <span class="va">cs</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'hg' not found</span>
 <span class="r-in"><span><span class="fu"><a href="erode.html">erode</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Channel with width 67.9528711767487</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'g' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
