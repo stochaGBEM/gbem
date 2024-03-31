@@ -1,5 +1,5 @@
 Package: gbem
-Title: Physical model to calculate riverbank erosion volume
+Title: Gravel Bed River Bank Erosion Model
 Version: 0.0.0.9000
 Authors@R: 
     c(

@@ -14,8 +14,9 @@ status](https://www.r-pkg.org/badges/version/gbem)](https://CRAN.R-project.org/p
 coverage](https://codecov.io/gh/stochaGBEM/gbem/branch/main/graph/badge.svg)](https://app.codecov.io/gh/stochaGBEM/gbem?branch=main)
 <!-- badges: end -->
 
-The goal of gbem is to calculate erosion volumes expected at a river’s
-cross section, given flow magnitude and duration.
+The goal of **gbem** is to implement a gravel bed river bank erosion
+model, calculating erosion volumes expected at a river’s cross section
+given an event hydrograph.
 
 **WARNING**: This package is under active development and is not
 intended to be used yet.
