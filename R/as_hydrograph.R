@@ -24,6 +24,7 @@ as_hydrograph <- function(x, ...) {
 #' @rdname as_hydrograph
 #' @export
 as_hydrograph.data.frame <- function(x, ..., times_from, flows_from, unit = 1) {
+  ellipsis::check_dots_empty()
   times <- rlang::enquo(times_from)
   flows <- rlang::enquo(flows_from)
   times <- rlang::eval_tidy(times, data = x) * unit

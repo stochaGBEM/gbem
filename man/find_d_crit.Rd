@@ -19,6 +19,3 @@ Critical threshold for channel widening.
 \description{
 FILL_THIS_IN: THRESHOLD OF WHAT?
 }
-\examples{
-gbem:::find_d_crit(0.35, 0.5, 0.01)
-}

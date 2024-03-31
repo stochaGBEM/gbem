@@ -2,7 +2,6 @@
 #'
 #' @param H Bank height ??? (meters???); numeric vector.
 #' @param d Water depth ??? (meters???); numeric vector.
-#'
 #' @returns Vector of `mu` values.
 est_mu <- function(H, d){
   Hd <- vctrs::vec_recycle_common(H, d)

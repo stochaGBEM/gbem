@@ -7,7 +7,7 @@
 #' @param times_to,flows_to Column names for the time and flow values.
 #' @returns A data frame representation of a hydrograph.
 #' @examples
-#' hydrograph_snow(5, 2) |>
+#' hyd_snow(5, 2) |>
 #'   discretize_hydrograph(100) |>
 #'   plot()
 #' @export

@@ -5,8 +5,6 @@
 #' @param H Effective rooting depth for vegetation; single numeric.
 #' @param t_c84 FILL_THIS_IN
 #' @param S Energy gradient of the stream channel; single numeric.
-#' @examples
-#' gbem:::find_d_crit(0.35, 0.5, 0.01)
 #' @returns Critical threshold for channel widening.
 find_d_crit <- function(H, t_c84, S){
   d_crit <- t_c84 / (g * rho * S)  # max depth that can be maintained (no veg)

@@ -20,7 +20,7 @@ A data frame representation of a hydrograph.
 Evaluates a hydrograph over a time grid.
 }
 \examples{
-hydrograph_snow(5, 2) |>
+hyd_snow(5, 2) |>
   discretize_hydrograph(100) |>
   plot()
 }
