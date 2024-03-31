@@ -6,9 +6,9 @@
 \alias{hyd_const}
 \title{Pre-set Event Hydrographs}
 \usage{
-hyd_snow(peak, baseflow, duration = 3 * 24)
+hyd_snow(peak, baseflow, duration = 9 * 24)
 
-hyd_rain(peak, baseflow, duration = 9 * 24)
+hyd_rain(peak, baseflow, duration = 3 * 24)
 
 hyd_const(peak, duration = 1)
 }

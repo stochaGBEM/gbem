@@ -5,7 +5,7 @@
 \title{Uses gbem to estimate the channel change during a flood hydrograph
 with Q values for every hour of the floods}
 \usage{
-gbem2(hydrograph, cross_section, niter = 100)
+gbem2(hydrograph, cross_section, niter = 1000)
 }
 \arguments{
 \item{hydrograph}{Event hydrograph carried by the stream, with time units
@@ -24,7 +24,7 @@ Uses gbem to estimate the channel change during a flood hydrograph
 with Q values for every hour of the floods
 }
 \examples{
-hg <- hydrograph_snow(5, 2)
+hg <- hyd_snow(5, 2)
 cs <- cross_section(3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
 g <- gbem2(hg, cs)
 erode(g)
