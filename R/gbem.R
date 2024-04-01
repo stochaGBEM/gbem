@@ -16,10 +16,10 @@
 #' - `cross_section`: The original cross section.
 #' @examples
 #' cs <- cross_section(5, grad = 0.01, d50 = 0.5, d84 = 0.5, roughness = 0.02)
-#' gbem(100, 1, cs)
+#' gbem0(100, 1, cs)
 #' @seealso [erode()]
 #' @export
-gbem <- function(Q, t, cross_section) {
+gbem0 <- function(Q, t, cross_section) {
   # Step 0: get the cross section properties.
   n <- cross_section$roughness
   d84 <- cross_section$d84

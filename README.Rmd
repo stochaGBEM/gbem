@@ -87,17 +87,10 @@ cs
 
 ### Gravel-bed river bank erosion model
 
-Execute the algorithm for a constant flow by running `gbem()`. That returns a gbem object containing information about channel changes. Run `erode()` to execute the changes to get a new cross section:
+Let a hydrograph erode a channel using `gbem()`. That returns a gbem object encoding information about channel changes. Run `erode()` to execute the changes to get a new cross section:
 
 ```{r}
-g1 <- gbem(100, t = 1, cross_section = cs)
-erode(g1)
-```
-
-You can also iterate GBEM across a hydrograph. 
-
-```{r}
-g2 <- gbem2(hg, cross_section = cs, niter = 100)
-erode(g2)
+g <- gbem2(hg, cross_section = cs, niter = 100)
+erode(g)
 ```
 

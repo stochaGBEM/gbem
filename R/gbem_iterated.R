@@ -20,7 +20,7 @@ gbem2 <- function(hydrograph, cross_section, niter = 1000){
   v_b <- numeric()
   cs <- list(cross_section)
   for (i in seq_len(niter)) {
-    gbem_ <- gbem(event$flow[i], dt, cs[[i]])
+    gbem_ <- gbem0(event$flow[i], dt, cs[[i]])
     erosion[i] <- gbem_$dw_const
     v_b[i] <- gbem_$v_b
     cs[[i + 1]] <- erode(gbem_)  #widen the channel
@@ -28,7 +28,7 @@ gbem2 <- function(hydrograph, cross_section, niter = 1000){
   event$erosion <- erosion
   event$v_b <- v_b
   peak <- max(event$flow)
-  dw_pred <- gbem(peak, dt, cross_section)$dw_pred  #find
+  dw_pred <- gbem0(peak, dt, cross_section)$dw_pred  #find
   dw_const <- sum(erosion)
   v_b <- sum(v_b)
   list(
