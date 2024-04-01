@@ -1,11 +1,24 @@
-#' Uses gbem to estimate the channel change during a flood hydrograph
-#' with Q values for every hour of the floods
+#' Gravel-Bed River Bank Erosion Model
+#'
+#' Runs the GBEM algorithm to determine erosion of a channel cross section
+#' from a supplied event hydrograph.
 #'
 #' @param hydrograph Event hydrograph carried by the stream, with time units
 #' in hours.
-#' @param cross_section Cross section of the stream.
+#' @param cross_section A `"cross_section"` object representing a stream's
+#' cross section.
 #' @param niter Number of iterations to run the algorithm over.
-#' @returns A discretized event hydrograph with erosion widths and volumes
+#' @details The hydrograph is first discretized into `niter` constant flows,
+#' and the GBEM algorithm is iterated on those flows.
+#' @returns A list of the following components:
+#'
+#' - `dw_pred`: predicted widening.
+#' - `dw_const`: change in width constrained by transport capacity, the most
+#    important thing here.
+#' - `v_b`: transport capacity * time. Volume of transport that can be moved
+#'   by the river.
+#' - `cross_section`: The original cross section.
+#' - `event`: A discretized event hydrograph with erosion widths and volumes
 #' at each time step.
 #' @examples
 #' hg <- hyd_snow(5, 2)

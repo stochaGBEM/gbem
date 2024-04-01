@@ -2,8 +2,7 @@
 % Please edit documentation in R/gbem_iterated.R
 \name{gbem}
 \alias{gbem}
-\title{Uses gbem to estimate the channel change during a flood hydrograph
-with Q values for every hour of the floods}
+\title{Gravel-Bed River Bank Erosion Model}
 \usage{
 gbem(hydrograph, cross_section, niter = 1000)
 }
@@ -11,17 +10,30 @@ gbem(hydrograph, cross_section, niter = 1000)
 \item{hydrograph}{Event hydrograph carried by the stream, with time units
 in hours.}
 
-\item{cross_section}{Cross section of the stream.}
+\item{cross_section}{A \code{"cross_section"} object representing a stream's
+cross section.}
 
 \item{niter}{Number of iterations to run the algorithm over.}
 }
 \value{
-A discretized event hydrograph with erosion widths and volumes
+A list of the following components:
+\itemize{
+\item \code{dw_pred}: predicted widening.
+\item \code{dw_const}: change in width constrained by transport capacity, the most
+\item \code{v_b}: transport capacity * time. Volume of transport that can be moved
+by the river.
+\item \code{cross_section}: The original cross section.
+\item \code{event}: A discretized event hydrograph with erosion widths and volumes
 at each time step.
 }
+}
 \description{
-Uses gbem to estimate the channel change during a flood hydrograph
-with Q values for every hour of the floods
+Runs the GBEM algorithm to determine erosion of a channel cross section
+from a supplied event hydrograph.
+}
+\details{
+The hydrograph is first discretized into \code{niter} constant flows,
+and the GBEM algorithm is iterated on those flows.
 }
 \examples{
 hg <- hyd_snow(5, 2)

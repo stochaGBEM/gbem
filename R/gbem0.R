@@ -1,7 +1,7 @@
-#' Main GBEM Workhorse
+#' Single iteration of the GBEM algorithm
 #'
 #' Run the gravel-bed river bank erosion model to determine channel
-#' changes.
+#' changes for a constant flow over a small duration.
 #'
 #' @param Q Discharge carried by the stream
 #' @param t Time for which Q acts on the stream channel (hrs)
@@ -14,11 +14,7 @@
 #' - `v_b`: transport capacity * time. Volume of transport that can be moved
 #'   by the river.
 #' - `cross_section`: The original cross section.
-#' @examples
-#' cs <- cross_section(5, grad = 0.01, d50 = 0.5, d84 = 0.5, roughness = 0.02)
-#' gbem0(100, 1, cs)
 #' @seealso [erode()]
-#' @export
 gbem0 <- function(Q, t, cross_section) {
   # Step 0: get the cross section properties.
   n <- cross_section$roughness
