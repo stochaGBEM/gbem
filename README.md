@@ -116,7 +116,7 @@ object encoding information about channel changes. Run `erode()` to
 execute the changes to get a new cross section:
 
 ``` r
-g <- gbem2(hg, cross_section = cs, niter = 100)
+g <- gbem(hg, cross_section = cs, niter = 100)
 erode(g)
 #> Channel with width 23.4198648991414
 ```
