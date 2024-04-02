@@ -2,7 +2,7 @@
 % Please edit documentation in R/ch_width.R
 \name{ch_width}
 \alias{ch_width}
-\title{Extract Channel Width}
+\title{Get and Set Channel Width}
 \usage{
 ch_width(cross_section)
 }
@@ -14,5 +14,11 @@ cross section.}
 Cross section width; single numeric.
 }
 \description{
-Extract Channel Width
+Get and Set Channel Width
+}
+\examples{
+cs <- cross_section(3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
+ch_width(cs)
+ch_width(cs) <- 10
+cs
 }
