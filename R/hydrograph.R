@@ -15,11 +15,11 @@
 
 #' @examples
 #' # Hydrograph over 10 units of time:
-#' my_hydrograph <- hydrograph(2 ~ 0, 5 ~ 1 / 3, 2 ~ 1, unit = 10)
+#' my_hydrograph <- hydrograph(7 ~ 0, 25 ~ 1 / 3, 7 ~ 1, unit = 10)
 #' plot(my_hydrograph, n = 1000)
 #'
 #' # Hydrograph spanning 24 hours:
-#' my_hydrograph <- hydrograph(3 ~ 0, 5 ~ 10, 4.8 ~ 15, 3 ~ 24)
+#' my_hydrograph <- hydrograph(7 ~ 0, 25 ~ 10, 20 ~ 15, 7 ~ 24)
 #' plot(my_hydrograph, n = 1000)
 #' @export
 hydrograph <- function(..., unit = 1, env = rlang::caller_env()) {

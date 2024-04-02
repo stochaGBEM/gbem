@@ -21,10 +21,13 @@
 #' - `event`: A discretized event hydrograph with erosion widths and volumes
 #' at each time step.
 #' @examples
-#' hg <- hyd_snow(5, 2)
-#' cs <- cross_section(3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
+#' cs <- cross_section(9, grad = 0.02, d50 = 45, d84 = 90, roughness = 0.01)
+#' hg <- hyd_snow(15, baseflow = 5)
 #' g <- gbem(hg, cs)
-#' erode(g)
+#' erode(g) # Erosion occurs
+#'
+#' ch_width(cs) <- 100
+#' erode(gbem(hg, cs)) # No erosion
 #' @export
 gbem <- function(hydrograph, cross_section, niter = 1000){
   event <- discretize_hydrograph(hydrograph, niter)

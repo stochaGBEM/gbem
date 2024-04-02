@@ -39,6 +39,24 @@ the command `install.packages("remotes")`.
 library(gbem)
 ```
 
+### Cross Sections
+
+Make a channel cross section:
+
+``` r
+cs <- cross_section(15, grad = 0.02, d50 = 65, d84 = 100, roughness = 0.01)
+cs
+#> Channel with width 15
+```
+
+What’s the largest flow that the channel can accommodate without
+eroding?
+
+``` r
+eroding_flow(cs)
+#> [1] 10.52962
+```
+
 ### Hydrographs
 
 Make a hydrograph from scratch:
@@ -50,7 +68,7 @@ hg <- hydrograph(
 plot(hg)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 Or, from a data frame; this time, also specify a time multiplier:
 
@@ -60,7 +78,7 @@ data.frame(times = c(0, 1 / 3, 1), flow = c(100, 500, 200)) |>
   plot()
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 There are canned hydrographs for snowmelt-related and rainfall-related
 events, too:
@@ -70,14 +88,14 @@ hyd_rain(peak = 200, baseflow = 50) |>
   plot()
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 ``` r
 hyd_snow(peak = 200, baseflow = 50) |> 
   plot()
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-2.png" width="100%" />
 
 You can easily discretize the hydrograph if you’d like to do manual
 calculations:
@@ -99,16 +117,6 @@ discretize_hydrograph(hg, 10)
 #> 10 10     2
 ```
 
-### Cross Sections
-
-Make a channel cross section:
-
-``` r
-cs <- cross_section(width = 3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
-cs
-#> Channel with width 3
-```
-
 ### Gravel-bed river bank erosion model
 
 Let a hydrograph erode a channel using `gbem()`. That returns a gbem
@@ -116,7 +124,8 @@ object encoding information about channel changes. Run `erode()` to
 execute the changes to get a new cross section:
 
 ``` r
-g <- gbem(hg, cross_section = cs, niter = 100)
+h <- hyd_rain(eroding_flow(cs) * 4, eroding_flow(cs))
+g <- gbem(h, cross_section = cs)
 erode(g)
-#> Channel with width 23.4198648991414
+#> Channel with width 46.1486486486487
 ```

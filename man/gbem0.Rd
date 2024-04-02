@@ -4,12 +4,12 @@
 \alias{gbem0}
 \title{Single iteration of the GBEM algorithm}
 \usage{
-gbem0(Q, t, cross_section)
+gbem0(flow, duration, cross_section)
 }
 \arguments{
-\item{Q}{Discharge carried by the stream}
+\item{flow}{Discharge carried by the stream.}
 
-\item{t}{Time for which Q acts on the stream channel (hrs)}
+\item{duration}{Time for which flow acts on the stream channel (hrs).}
 
 \item{cross_section}{A \code{"cross_section"} object.}
 }

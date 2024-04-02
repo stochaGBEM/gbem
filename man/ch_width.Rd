@@ -17,7 +17,7 @@ Cross section width; single numeric.
 Get and Set Channel Width
 }
 \examples{
-cs <- cross_section(3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
+cs <- cross_section(3, grad = 0.01, d50 = 45, d84 = 90, roughness = 0.01)
 ch_width(cs)
 ch_width(cs) <- 10
 cs

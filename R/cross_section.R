@@ -18,7 +18,7 @@
 #' - 5 to 50% tree / shrub cover: `rootdepth = 0.90`.
 #' - more than 50% tree / shrub cover: `rootdepth = 1.10`.
 #' @examples
-#' cross_section(3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
+#' cross_section(3, grad = 0.01, d50 = 45, d84 = 80, roughness = 0.01)
 #' @returns A `"cross_section"` object.
 #' @export
 cross_section <- function(width, grad, d50, d84, roughness, rootdepth = 0) {

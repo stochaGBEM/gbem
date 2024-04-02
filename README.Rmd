@@ -42,6 +42,21 @@ If this doesn't work, you may have to install the remotes package with the comma
 library(gbem)
 ```
 
+### Cross Sections
+
+Make a channel cross section:
+
+```{r}
+cs <- cross_section(15, grad = 0.02, d50 = 65, d84 = 100, roughness = 0.01)
+cs
+```
+
+What's the largest flow that the channel can accommodate without eroding?
+
+```{r}
+eroding_flow(cs)
+```
+
 ### Hydrographs
 
 Make a hydrograph from scratch:
@@ -76,21 +91,13 @@ You can easily discretize the hydrograph if you'd like to do manual calculations
 discretize_hydrograph(hg, 10)
 ```
 
-### Cross Sections
-
-Make a channel cross section:
-
-```{r}
-cs <- cross_section(width = 3, grad = 0.01, d50 = 0.1, d84 = 0.5, roughness = 0.01)
-cs
-```
-
 ### Gravel-bed river bank erosion model
 
 Let a hydrograph erode a channel using `gbem()`. That returns a gbem object encoding information about channel changes. Run `erode()` to execute the changes to get a new cross section:
 
 ```{r}
-g <- gbem(hg, cross_section = cs, niter = 100)
+h <- hyd_rain(eroding_flow(cs) * 4, eroding_flow(cs))
+g <- gbem(h, cross_section = cs)
 erode(g)
 ```
 
