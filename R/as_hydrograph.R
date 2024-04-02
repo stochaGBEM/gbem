@@ -27,8 +27,10 @@ as_hydrograph.data.frame <- function(x, ..., times_from, flows_from, unit = 1) {
   ellipsis::check_dots_empty()
   times <- rlang::enquo(times_from)
   flows <- rlang::enquo(flows_from)
-  times <- rlang::eval_tidy(times, data = x) * unit
-  flows <- rlang::eval_tidy(flows, data = x)
+  timecol <- tidyselect::eval_select(times, data = x)
+  flowcol <- tidyselect::eval_select(flows, data = x)
+  times <- x[[timecol]] * unit
+  flows <- x[[flowcol]]
   f <- stats::approxfun(times, flows)
   h <- new_hydrograph(f, times = range(times), peak = max(flows))
   validate_hydrograph(h)

@@ -29,5 +29,6 @@ Imports:
     graphics,
     rlang,
     stats,
+    tidyselect,
     vctrs
 URL: https://stochagbem.github.io/gbem/
