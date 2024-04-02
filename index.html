@@ -83,32 +83,45 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stochagbem.github.io/gbem/">gbem</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
+<h3 id="cross-sections">Cross Sections<a class="anchor" aria-label="anchor" href="#cross-sections"></a>
+</h3>
+<p>Make a channel cross section:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cross_section.html">cross_section</a></span><span class="op">(</span><span class="fl">15</span>, grad <span class="op">=</span> <span class="fl">0.02</span>, d50 <span class="op">=</span> <span class="fl">65</span>, d84 <span class="op">=</span> <span class="fl">100</span>, roughness <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span><span class="va">cs</span></span>
+<span><span class="co">#&gt; Channel with width 15</span></span></code></pre></div>
+<p>What’s the largest flow that the channel can accommodate without eroding?</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/eroding_flow.html">eroding_flow</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 10.52962</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="hydrographs">Hydrographs<a class="anchor" aria-label="anchor" href="#hydrographs"></a>
 </h3>
 <p>Make a hydrograph from scratch:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hg</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/hydrograph.html">hydrograph</a></span><span class="op">(</span></span>
 <span>  <span class="fl">2</span> <span class="op">~</span> <span class="fl">0</span>, <span class="fl">3</span> <span class="op">~</span> <span class="fl">1</span>, <span class="fl">5</span> <span class="op">~</span> <span class="fl">2</span>, <span class="fl">3</span> <span class="op">~</span> <span class="fl">5</span>, <span class="fl">2</span> <span class="op">~</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">hg</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
 <p>Or, from a data frame; this time, also specify a time multiplier:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, flow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">500</span>, <span class="fl">200</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="reference/as_hydrograph.html">as_hydrograph</a></span><span class="op">(</span>times_from <span class="op">=</span> <span class="va">times</span>, flows_from <span class="op">=</span> <span class="va">flow</span>, unit <span class="op">=</span> <span class="fl">24</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-3-1.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
 <p>There are canned hydrographs for snowmelt-related and rainfall-related events, too:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/event_hydrographs.html">hyd_rain</a></span><span class="op">(</span>peak <span class="op">=</span> <span class="fl">200</span>, baseflow <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/event_hydrographs.html">hyd_snow</a></span><span class="op">(</span>peak <span class="op">=</span> <span class="fl">200</span>, baseflow <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-4-2.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-6-2.png" width="100%"></p>
 <p>You can easily discretize the hydrograph if you’d like to do manual calculations:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/discretize_hydrograph.html">discretize_hydrograph</a></span><span class="op">(</span><span class="va">hg</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 10 × 2</span></span>
 <span><span class="co">#&gt;     time  flow</span></span>
@@ -125,22 +138,14 @@
 <span><span class="co">#&gt; 10 10     2</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="cross-sections">Cross Sections<a class="anchor" aria-label="anchor" href="#cross-sections"></a>
-</h3>
-<p>Make a channel cross section:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cross_section.html">cross_section</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">3</span>, grad <span class="op">=</span> <span class="fl">0.01</span>, d50 <span class="op">=</span> <span class="fl">0.1</span>, d84 <span class="op">=</span> <span class="fl">0.5</span>, roughness <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
-<span><span class="va">cs</span></span>
-<span><span class="co">#&gt; Channel with width 3</span></span></code></pre></div>
-</div>
-<div class="section level3">
 <h3 id="gravel-bed-river-bank-erosion-model">Gravel-bed river bank erosion model<a class="anchor" aria-label="anchor" href="#gravel-bed-river-bank-erosion-model"></a>
 </h3>
 <p>Let a hydrograph erode a channel using <code><a href="reference/gbem.html">gbem()</a></code>. That returns a gbem object encoding information about channel changes. Run <code><a href="reference/erode.html">erode()</a></code> to execute the changes to get a new cross section:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gbem.html">gbem</a></span><span class="op">(</span><span class="va">hg</span>, cross_section <span class="op">=</span> <span class="va">cs</span>, niter <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/event_hydrographs.html">hyd_rain</a></span><span class="op">(</span><span class="fu"><a href="reference/eroding_flow.html">eroding_flow</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span> <span class="op">*</span> <span class="fl">4</span>, <span class="fu"><a href="reference/eroding_flow.html">eroding_flow</a></span><span class="op">(</span><span class="va">cs</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gbem.html">gbem</a></span><span class="op">(</span><span class="va">h</span>, cross_section <span class="op">=</span> <span class="va">cs</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/erode.html">erode</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Channel with width 23.4198648991414</span></span></code></pre></div>
+<span><span class="co">#&gt; Channel with width 46.1486486486487</span></span></code></pre></div>
 </div>
 </div>
 </div>
