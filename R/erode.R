@@ -9,6 +9,6 @@
 erode <- function(gbem) {
   cs <- gbem$cross_section
   dw <- gbem$dw_const
-  cs$width <- cs$width + dw
+  ch_width(cs) <- ch_width(cs) + dw
   cs
 }
