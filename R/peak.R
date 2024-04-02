@@ -14,6 +14,6 @@ peak <- function(hydrograph) {
   }
   negh <- function(x) -hydrograph(x)
   r <- range(hydrograph)
-  o <- optim(mean(r), negh, method = "Brent", lower = r[1], upper = r[2])
+  o <- stats::optim(mean(r), negh, method = "Brent", lower = r[1], upper = r[2])
   -o$value
 }
