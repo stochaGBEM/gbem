@@ -7,7 +7,7 @@
 #' @param times_from Column name containing timings of the hydrograph
 #' change points, including the terminus times. Unquoted.
 #' @param flows_from Column name containing the discharge values
-#' corresponding to the timings in the `times_from` column. Unquoted.
+#' corresponding to the timings in the `times_from` column; possibly unquoted.
 #' @inheritParams hydrograph
 #' @returns An event hydrograph, as in `hydrograph()`, made up of
 #' linearly interpolated discharge-timing pairs.

@@ -2,13 +2,18 @@
 % Please edit documentation in R/ch_width.R
 \name{ch_width}
 \alias{ch_width}
+\alias{ch_width<-}
 \title{Get and Set Channel Width}
 \usage{
 ch_width(cross_section)
+
+ch_width(cross_section) <- value
 }
 \arguments{
 \item{cross_section}{A \code{"cross_section"} object representing a stream's
 cross section.}
+
+\item{value}{Channel width in meters; single positive numeric.}
 }
 \value{
 Cross section width; single numeric.

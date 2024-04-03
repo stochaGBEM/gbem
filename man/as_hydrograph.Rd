@@ -18,7 +18,7 @@ as_hydrograph(x, ...)
 change points, including the terminus times. Unquoted.}
 
 \item{flows_from}{Column name containing the discharge values
-corresponding to the timings in the \code{times_from} column. Unquoted.}
+corresponding to the timings in the \code{times_from} column; possibly unquoted.}
 
 \item{unit}{Conversion factor for the time values; single numeric.
 Useful if, for example, the timing is specified as a proportion of

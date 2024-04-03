@@ -7,11 +7,14 @@
 #' ch_width(cs)
 #' ch_width(cs) <- 10
 #' cs
+#' @rdname ch_width
 #' @export
 ch_width <- function(cross_section) {
   cross_section$width
 }
 
+#' @param value Channel width in meters; single positive numeric.
+#' @rdname ch_width
 #' @export
 `ch_width<-` <- function(cross_section, value) {
   cross_section$width <- value
