@@ -80,7 +80,7 @@ validate_cross_section <- function(cross_section) {
 #' @returns An object of class `"cross_section"`, although not necessarily with
 #' valid properties.
 new_cross_section <- function(l, ..., class = character()) {
-  structure(l, class = c(class, "cross_section"))
+  structure(l, ..., class = c(class, "cross_section"))
 }
 
 #' @exportS3Method base::print
