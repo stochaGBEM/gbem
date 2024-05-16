@@ -32,3 +32,7 @@ Imports:
     tidyselect,
     vctrs
 URL: https://stochagbem.github.io/gbem/
+Depends: 
+    sxchan
+Remotes: 
+    stochaGBEM/sxchan
