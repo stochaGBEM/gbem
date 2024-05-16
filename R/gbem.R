@@ -47,11 +47,13 @@ gbem <- function(hydrograph, cross_section, niter = 1000){
   dw_pred <- gbem0(peak, dt, cross_section)$dw_pred  #find
   dw_const <- sum(erosion)
   v_b <- sum(v_b)
-  list(
+  l <- list(
     dw_pred = dw_pred,
     dw_const = dw_const,
     v_b = v_b,
     cross_section = cross_section,
     event = event
   )
+  class(l) <- "gbem"
+  l
 }

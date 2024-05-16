@@ -6,7 +6,19 @@
 #' @returns The original cross section supplied to gbem, with possibly
 #' modified width based on the gbem run.
 #' @export
-erode <- function(gbem) {
+erode <- function(object) UseMethod("erode")
+
+#' @export
+erode.gbem <- function(object) {
+  cs <- gbem$cross_section
+  dw <- gbem$dw_const
+  ch_width(cs) <- ch_width(cs) + dw
+  cs
+}
+
+#' @export
+erode.gbem_ch <- function(object) {
+  e <- lapply(object, erode)
   cs <- gbem$cross_section
   dw <- gbem$dw_const
   ch_width(cs) <- ch_width(cs) + dw
