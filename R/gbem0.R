@@ -20,7 +20,7 @@ gbem0 <- function(flow, duration, cross_section) {
   n <- cross_section$roughness
   d84 <- cross_section$d84
   d50 <- cross_section$d50
-  W <- ch_width(cross_section)
+  W <- xt_width(cross_section)
   S <- cross_section$grad
   H <- cross_section$rootdepth
   #step 1: calculate the critical threshold for channel widening

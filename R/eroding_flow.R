@@ -11,7 +11,7 @@
 eroding_flow <- function(cross_section) {
   n <- cross_section$roughness
   d84 <- cross_section$d84
-  W <- ch_width(cross_section)
+  W <- xt_width(cross_section)
   S <- cross_section$grad
   H <- cross_section$rootdepth
   t_c84 <- t_c84(d84)

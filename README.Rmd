@@ -40,21 +40,34 @@ If this doesn't work, you may have to install the remotes package with the comma
 
 ```{r example}
 library(gbem)
+library(sxchan)
+library(sf)
 ```
 
 ### Cross Sections
 
-Make a channel cross section:
+Make channel cross sections from the default bankline polygon in the **sxchan** package.
 
 ```{r}
-cs <- cross_section(15, grad = 0.02, d50 = 65, d84 = 100, roughness = 0.01)
-cs
+xs <- xt_generate_xsc(my_banks, n = 100) |> 
+  st_sf(
+    grad = 0.02, d50 = 65, d84 = 100, H = 0,
+    roughness = seq(0.001, 0.01, length.out = 100)
+  )
 ```
+
+Here is what they look like.
+
+```{r}
+plot(my_banks)
+plot(st_geometry(xs), add = TRUE)
+```
+
 
 What's the largest flow that the channel can accommodate without eroding?
 
 ```{r}
-eroding_flow(cs)
+eroding_flow(xs)
 ```
 
 ### Hydrographs

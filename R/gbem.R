@@ -5,8 +5,8 @@
 #'
 #' @param hydrograph Event hydrograph carried by the stream, with time units
 #' in hours.
-#' @param cross_section A `"cross_section"` object representing a stream's
-#' cross section.
+#' @param cross_section A cross section object representing stream
+#' cross sections; see `sxchan::xt_sx()`. Must have
 #' @param niter Number of iterations to run the algorithm over.
 #' @details The hydrograph is first discretized into `niter` constant flows,
 #' and the GBEM algorithm is iterated on those flows.
@@ -35,11 +35,11 @@ gbem <- function(hydrograph, cross_section, niter = 1000){
   erosion <- numeric()
   v_b <- numeric()
   cs <- list(cross_section)
-  for (i in seq_len(niter)) {
-    gbem_ <- gbem0(event$flow[i], dt, cs[[i]])
-    erosion[i] <- gbem_$dw_const
-    v_b[i] <- gbem_$v_b
-    cs[[i + 1]] <- erode(gbem_)  #widen the channel
+  for (t in seq_len(niter)) {
+    gbem_ <- gbem0(event$flow[t], dt, cs[[t]])
+    erosion[t] <- gbem_$dw_const
+    v_b[t] <- gbem_$v_b
+    cs[[t + 1]] <- erode(gbem_)  #widen the channel
   }
   event$erosion <- erosion
   event$v_b <- v_b

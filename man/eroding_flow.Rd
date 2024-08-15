@@ -7,8 +7,8 @@
 eroding_flow(cross_section)
 }
 \arguments{
-\item{cross_section}{A \code{"cross_section"} object representing a stream's
-cross section.}
+\item{cross_section}{A cross section object representing stream
+cross sections; see \code{sxchan::xt_sx()}. Must have}
 }
 \value{
 Discharge; single numeric.

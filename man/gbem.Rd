@@ -10,8 +10,8 @@ gbem(hydrograph, cross_section, niter = 1000)
 \item{hydrograph}{Event hydrograph carried by the stream, with time units
 in hours.}
 
-\item{cross_section}{A \code{"cross_section"} object representing a stream's
-cross section.}
+\item{cross_section}{A cross section object representing stream
+cross sections; see \code{sxchan::xt_sx()}. Must have}
 
 \item{niter}{Number of iterations to run the algorithm over.}
 }
