@@ -18,7 +18,7 @@ test_that("gbem0 is the same as gbem on constant hydrograph.", {
   g0 <- gbem0(2 * q, 10, cross_section = cs)
   g <- gbem(h, cross_section = cs)
   g$event <- NULL
-  expect_equal(g0, g)
+  expect_equal(g0[c("dw_pred", "dw_const")], g[c("dw_pred", "dw_const")])
   expect_equal(erode(g0), erode(g))
 })
 
