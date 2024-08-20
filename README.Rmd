@@ -67,6 +67,7 @@ plot(st_geometry(xs), add = TRUE)
 What's the largest flow that the channel can accommodate without eroding?
 
 ```{r}
+xt_width
 eroding_flow(xs)
 ```
 
