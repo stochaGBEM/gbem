@@ -1,8 +1,11 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://stochagbem.github.io/gbem/404.html</loc></url>
+<url><loc>https://stochagbem.github.io/gbem/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://stochagbem.github.io/gbem/CONTRIBUTING.html</loc></url>
 <url><loc>https://stochagbem.github.io/gbem/LICENSE.html</loc></url>
 <url><loc>https://stochagbem.github.io/gbem/authors.html</loc></url>
 <url><loc>https://stochagbem.github.io/gbem/index.html</loc></url>
+<url><loc>https://stochagbem.github.io/gbem/news/index.html</loc></url>
 <url><loc>https://stochagbem.github.io/gbem/reference/as_hydrograph.html</loc></url>
 <url><loc>https://stochagbem.github.io/gbem/reference/ch_width.html</loc></url>
 <url><loc>https://stochagbem.github.io/gbem/reference/convert_dataframe_to_tibble.html</loc></url>
