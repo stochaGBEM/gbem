@@ -4,22 +4,36 @@
 \alias{min_stable_channel}
 \title{Minimum-Width Stable Channel}
 \usage{
-min_stable_channel(cross_section, flow)
+min_stable_channel(sx, flow, resistance = c("ferguson", "manning"))
 }
 \arguments{
-\item{cross_section}{A \code{"cross_section"} object.}
+\item{sx}{Channel cross sections containing features needed by the
+erosion engine, such as created by the \code{sx()} functions such as
+\code{sx_ferguson()} or \code{sx_manning()}.}
 
-\item{flow}{Discharge carried by the stream.}
+\item{flow}{Discharge carried by the stream; single numeric.}
+
+\item{resistance}{Paradigm for modelling channel resistance; one of
+\code{"ferguson"} for using Ferguson's equation, or \code{"manning"} for Manning's
+equation.}
 }
 \value{
-The original cross section with width modified to be the minimum
-width to accommodate the flow without eroding.
+The original \code{sx} channel object, with cross section widths
+modified to match the minimum width required to accommodate the flow
+without eroding.
 }
 \description{
 Calculates the channel with the smallest width that remains stable
 under a given flow.
 }
 \examples{
-cs <- cross_section(3, grad = 0.01, d50 = 45, d84 = 80, roughness = 0.01)
-min_stable_channel(cs, 5)
+library(sxchan)
+x <- sx_manning(
+  xt_sxc(c(1, 1, 1)), grad = 0.01, d50 = 45, d84 = 80,
+  roughness = c(0.01, 0.02, 0.03)
+)
+y <- min_stable_channel(x, flow = 5, resistance = "manning")
+
+xt_width(x)
+xt_width(y)
 }

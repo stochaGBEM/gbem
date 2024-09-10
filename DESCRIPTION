@@ -30,9 +30,9 @@ Imports:
     rlang,
     stats,
     tidyselect,
-    vctrs
+    vctrs,
+    sxchan,
+    sf
 URL: https://stochagbem.github.io/gbem/
-Depends: 
-    sxchan
 Remotes: 
     stochaGBEM/sxchan

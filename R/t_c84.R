@@ -1,4 +1,4 @@
-#' @inheritParams cross_section
+#' @inheritParams sx_manning
 t_c84 <- function(d84) {
   shields_c84 * g * (rho_s - rho) * (d84 / 1000)
 }

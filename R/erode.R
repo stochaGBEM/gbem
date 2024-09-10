@@ -10,17 +10,10 @@ erode <- function(object) UseMethod("erode")
 
 #' @export
 erode.gbem <- function(object) {
-  cs <- gbem$cross_section
-  dw <- gbem$dw_const
-  ch_width(cs) <- ch_width(cs) + dw
-  cs
-}
-
-#' @export
-erode.gbem_ch <- function(object) {
-  e <- lapply(object, erode)
-  cs <- gbem$cross_section
-  dw <- gbem$dw_const
-  ch_width(cs) <- ch_width(cs) + dw
-  cs
+  sx <- object[["sx"]]
+  dw <- object[["dw_const"]]
+  sxc <- sf::st_geometry(sx)
+  sxc_new <- sxchan::xt_widen_by(sxc, by = dw)
+  sf::st_geometry(sx) <- sxc_new
+  sx
 }
