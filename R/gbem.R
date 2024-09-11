@@ -23,12 +23,13 @@
 #'
 #' @returns A list of the following components:
 #'
+#' - `sx`: The original cross section.
 #' - `dw_pred`: predicted widening.
 #' - `dw_const`: change in width constrained by transport capacity, the most
 #    important thing here.
 #' - `v_b`: transport capacity * time. Volume of transport that can be moved
-#'   by the river.
-#' - `sx`: The original cross section.
+#'   by the river. Matrix, with rows representing cross sections corresponding
+#'   to the rows of `sx`; columns are time steps.
 #' - `resistance`: the resistance paradigm used.
 #' @examples
 #' library(sf)
@@ -108,7 +109,6 @@ gbem <- function(hydrograph, sx, niter = 1000,
     dw_pred = dw_pred,
     dw_const = dw_const,
     v_b = v_b,
-    v_b_total = v_b_total,
     resistance = resistance
   )
   new_gbem(l)

@@ -23,11 +23,12 @@ equation.}
 \value{
 A list of the following components:
 \itemize{
+\item \code{sx}: The original cross section.
 \item \code{dw_pred}: predicted widening.
 \item \code{dw_const}: change in width constrained by transport capacity, the most
 \item \code{v_b}: transport capacity * time. Volume of transport that can be moved
-by the river.
-\item \code{sx}: The original cross section.
+by the river. Matrix, with rows representing cross sections corresponding
+to the rows of \code{sx}; columns are time steps.
 \item \code{resistance}: the resistance paradigm used.
 }
 }
