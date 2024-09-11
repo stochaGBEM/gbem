@@ -3,18 +3,27 @@
 #' For a given channel, calculates the largest flow a channel can accommodate
 #' without eroding.
 #' @inheritParams gbem
-#' @returns Discharge; single numeric.
+#' @returns Vector of discharges for each cross section.
 #' @examples
-#' cs <- cross_section(3, grad = 0.01, d50 = 45, d84 = 80, roughness = 0.01)
-#' eroding_flow(cs)
+#' library(sxchan)
+#' sxc <- xt_sxc(c(12, 15, 18))
+#' x <- sx_manning(sxc, grad = 0.02, d50 = 65, d84 = 100, roughness = 0.01)
+#' eroding_flow(x, resistance = "manning")
 #' @export
-eroding_flow <- function(cross_section) {
-  n <- cross_section$roughness
-  d84 <- cross_section$d84
-  W <- ch_width(cross_section)
-  S <- cross_section$grad
-  H <- cross_section$rootdepth
-  t_c84 <- t_c84(d84)
-  d_crit <- find_d_crit(H, t_c84, S)
-  d_crit^(5 / 3) * W * sqrt(S) / n
+eroding_flow <- function(sx, resistance = c("ferguson", "manning")) {
+  resistance <- rlang::arg_match(resistance)
+  validate_sx(sx, resistance = resistance)
+  if (resistance == "ferguson") {
+    stop("FERGUSON NOT AVAILABLE YET")
+  }
+  if (resistance == "manning") {
+    n <- sx$roughness
+    d84 <- sx$d84
+    W <- sxchan::xt_width(sx)
+    S <- sx$grad
+    H <- sx$rootdepth
+    t_c84 <- t_c84(d84)
+    d_crit <- find_d_crit(H, t_c84, S)
+    return(d_crit^(5 / 3) * W * sqrt(S) / n)
+  }
 }

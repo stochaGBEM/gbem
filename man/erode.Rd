@@ -4,10 +4,10 @@
 \alias{erode}
 \title{Erode a channel from GBEM}
 \usage{
-erode(gbem)
+erode(object)
 }
 \arguments{
-\item{gbem}{The output of \code{gbem()}, containing the channel change.}
+\item{object}{The output of \code{gbem()}, containing the channel change.}
 }
 \value{
 The original cross section supplied to gbem, with possibly

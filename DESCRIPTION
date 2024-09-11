@@ -1,6 +1,6 @@
 Package: gbem
 Title: Gravel Bed River Bank Erosion Model
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: 
     c(
     person("Brett", "Eaton", email = "beaton@bgcengineering.ca",
@@ -14,8 +14,11 @@ Authors@R:
     person("Jane", "Wang", email = "jwang@bgcengineering.ca",
            role = "ctb")
     )
-Description: The goal of gbem is to calculate erosion volumes expected 
-    at a river's cross section, given flow magnitude and duration. 
+Description: gbem contains bank erosion algorithms applicable to gravel bed
+    rivers. It allows for the creation of event hydrographs that are passed 
+    through a series of channel cross sections, for which erosion amounts
+    are calculated. A new eroded channel can thus be obtained, in the form
+    of updated cross sections. 
 License: CC BY-NC 4.0
 Suggests: 
     testthat (>= 3.0.0),
@@ -23,12 +26,16 @@ Suggests:
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Imports: 
     ellipsis,
     graphics,
     rlang,
     stats,
     tidyselect,
-    vctrs
+    vctrs,
+    sxchan,
+    sf
 URL: https://stochagbem.github.io/gbem/
+Remotes: 
+    stochaGBEM/sxchan

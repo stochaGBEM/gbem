@@ -4,20 +4,27 @@
 \alias{eroding_flow}
 \title{Flow Threshold for Channel Erosion}
 \usage{
-eroding_flow(cross_section)
+eroding_flow(sx, resistance = c("ferguson", "manning"))
 }
 \arguments{
-\item{cross_section}{A \code{"cross_section"} object representing a stream's
-cross section.}
+\item{sx}{Channel cross sections containing features needed by the
+erosion engine, such as created by the \code{sx()} functions such as
+\code{sx_ferguson()} or \code{sx_manning()}.}
+
+\item{resistance}{Paradigm for modelling channel resistance; one of
+\code{"ferguson"} for using Ferguson's equation, or \code{"manning"} for Manning's
+equation.}
 }
 \value{
-Discharge; single numeric.
+Vector of discharges for each cross section.
 }
 \description{
 For a given channel, calculates the largest flow a channel can accommodate
 without eroding.
 }
 \examples{
-cs <- cross_section(3, grad = 0.01, d50 = 45, d84 = 80, roughness = 0.01)
-eroding_flow(cs)
+library(sxchan)
+sxc <- xt_sxc(c(12, 15, 18))
+x <- sx_manning(sxc, grad = 0.02, d50 = 65, d84 = 100, roughness = 0.01)
+eroding_flow(x, resistance = "manning")
 }

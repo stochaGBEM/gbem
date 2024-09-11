@@ -37,25 +37,54 @@ the command `install.packages("remotes")`.
 
 ``` r
 library(gbem)
+library(sxchan)
+library(sf)
+#> Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE
 ```
 
 ### Cross Sections
 
-Make a channel cross section:
+Make channel cross sections from the default bankline polygon in the
+**sxchan** package, and add cross section features required for the
+Manning erosion engine.
 
 ``` r
-cs <- cross_section(15, grad = 0.02, d50 = 65, d84 = 100, roughness = 0.01)
-cs
-#> Channel with width 15
+channel <- xt_generate_sxc(demo_bankline, n = 100) |> 
+  sx_manning(
+    grad = 0.02, d50 = 65, d84 = 100, 
+    roughness = seq(0.001, 0.01, length.out = 100)
+  )
 ```
+
+Here is what they look like.
+
+``` r
+plot(demo_bankline)
+plot(st_geometry(channel), add = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 What’s the largest flow that the channel can accommodate without
-eroding?
+eroding? Visualize in a plot.
 
 ``` r
-eroding_flow(cs)
-#> [1] 10.52962
+eroding_flow(channel, resistance = "manning") |> 
+  plot(ylab = "Flow", xlab = "Cross Section Number")
 ```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+Or, the reverse can be calculated: what’s the minimum channel width that
+can accommodate a flow without eroding? Try a flow of 200:
+
+``` r
+min_channel <- min_stable_channel(channel, flow = 200, resistance = "manning")
+plot(demo_bankline)
+plot(st_geometry(min_channel), add = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 ### Hydrographs
 
@@ -68,7 +97,7 @@ hg <- hydrograph(
 plot(hg)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 Or, from a data frame; this time, also specify a time multiplier:
 
@@ -78,7 +107,7 @@ data.frame(times = c(0, 1 / 3, 1), flow = c(100, 500, 200)) |>
   plot()
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 There are canned hydrographs for snowmelt-related and rainfall-related
 events, too:
@@ -88,20 +117,20 @@ hyd_rain(peak = 200, baseflow = 50) |>
   plot()
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
 
 ``` r
 hyd_snow(peak = 200, baseflow = 50) |> 
   plot()
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-8-2.png" width="100%" />
 
 You can easily discretize the hydrograph if you’d like to do manual
 calculations:
 
 ``` r
-discretize_hydrograph(hg, 10)
+discretize_hydrograph(hg, niter = 10)
 #> # A tibble: 10 × 2
 #>     time  flow
 #>    <dbl> <dbl>
@@ -124,11 +153,20 @@ object encoding information about channel changes. Run `erode()` to
 execute the changes to get a new cross section:
 
 ``` r
-h <- hyd_rain(eroding_flow(cs) * 4, eroding_flow(cs))
-g <- gbem(h, cross_section = cs)
-erode(g)
-#> Channel with width 46.1486486486487
+q <- eroding_flow(channel, resistance = "manning")
+h <- hyd_rain(median(q) * 4, min(q) / 4)
+g <- gbem(h, channel, niter = 1000, resistance = "manning")
 ```
+
+Calculate the newly eroded channel, and visualize its cross sections:
+
+``` r
+new_channel <- erode(g)
+plot(demo_bankline)
+plot(st_geometry(new_channel), add = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
 ## Code of Conduct
 

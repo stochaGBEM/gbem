@@ -6,8 +6,10 @@
 #' @export
 peak <- function(hydrograph) {
   if (!is_hydrograph(hydrograph)) {
-    stop("`peak()` is expecting a hydrograph; found class '",
-         class(hydrograph)[1], "'.")
+    stop(
+      "`peak()` is expecting a hydrograph; found class '",
+      class(hydrograph)[1], "'."
+    )
   }
   if ("peak" %in% names(attributes(hydrograph))) {
     return(attr(hydrograph, "peak"))

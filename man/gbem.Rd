@@ -4,43 +4,79 @@
 \alias{gbem}
 \title{Gravel-Bed River Bank Erosion Model}
 \usage{
-gbem(hydrograph, cross_section, niter = 1000)
+gbem(hydrograph, sx, niter = 1000, resistance = c("ferguson", "manning"))
 }
 \arguments{
 \item{hydrograph}{Event hydrograph carried by the stream, with time units
-in hours.}
+in hours. See \code{hydrograph()}.}
 
-\item{cross_section}{A \code{"cross_section"} object representing a stream's
-cross section.}
+\item{sx}{Channel cross sections containing features needed by the
+erosion engine, such as created by the \code{sx()} functions such as
+\code{sx_ferguson()} or \code{sx_manning()}.}
 
-\item{niter}{Number of iterations to run the algorithm over.}
+\item{niter}{Number of time chunks to discretize the hydrograph into.}
+
+\item{resistance}{Paradigm for modelling channel resistance; one of
+\code{"ferguson"} for using Ferguson's equation, or \code{"manning"} for Manning's
+equation.}
 }
 \value{
 A list of the following components:
 \itemize{
+\item \code{sx}: The original cross section.
 \item \code{dw_pred}: predicted widening.
 \item \code{dw_const}: change in width constrained by transport capacity, the most
 \item \code{v_b}: transport capacity * time. Volume of transport that can be moved
-by the river.
-\item \code{cross_section}: The original cross section.
-\item \code{event}: A discretized event hydrograph with erosion widths and volumes
-at each time step.
+by the river. Matrix, with rows representing cross sections corresponding
+to the rows of \code{sx}; columns are time steps.
+\item \code{resistance}: the resistance paradigm used.
 }
 }
 \description{
-Runs the GBEM algorithm to determine erosion of a channel cross section
-from a supplied event hydrograph.
+Runs an event hydrograph through a channel and applies an erosion engine
+to determine lateral erosion.
 }
 \details{
-The hydrograph is first discretized into \code{niter} constant flows,
-and the GBEM algorithm is iterated on those flows.
+This algorithm implements one of two paradigms for modelling
+channel resistance.
+\enumerate{
+\item \strong{Manning's Equation}: FILL_THIS_IN
+\item \strong{Ferguson's Equation}: FILL_THIS_IN
+}
+
+An error is thrown if the input \code{sx} channel does not have sufficiently
+described properties.
 }
 \examples{
-cs <- cross_section(9, grad = 0.02, d50 = 45, d84 = 90, roughness = 0.01)
-hg <- hyd_snow(15, baseflow = 5)
-g <- gbem(hg, cs)
-erode(g) # Erosion occurs
+library(sf)
+library(sxchan)
 
-ch_width(cs) <- 100
-erode(gbem(hg, cs)) # No erosion
+## Set up the channel.
+cross_sections <- xt_generate_sxc(demo_bankline, n = 20)
+n <- length(cross_sections)
+channel <- sx_manning(
+  cross_sections, grad = 0.02, d50 = 45, d84 = 90,
+  roughness = append(rep(0.01, n / 2), rep(0.05, n / 2))
+)
+
+## Create an event hydrograph.
+hg <- hyd_snow(200, baseflow = 20)
+
+## Run the hydrograph through the channel, using Manning's method.
+demo_gbem <- gbem(hg, channel, niter = 100, resistance = "manning")
+
+## Erode the channel
+(new_channel <- erode(demo_gbem)) # Erosion occurs
+
+plot(demo_bankline)
+plot(st_geometry(new_channel), add = TRUE, col = "blue")
+
+## Run a smaller event through that does no erosion.
+q <- min(eroding_flow(channel, resistance = "manning"))
+hg2 <- hyd_rain(q / 2, baseflow = q / 10)
+demo_gbem2 <- gbem(hg2, channel, niter = 100, resistance = "manning")
+new_channel2 <- erode(demo_gbem2)
+
+## No erosion:
+identical(st_geometry(channel), st_geometry(new_channel2))
 }

@@ -40,22 +40,45 @@ If this doesn't work, you may have to install the remotes package with the comma
 
 ```{r example}
 library(gbem)
+library(sxchan)
+library(sf)
 ```
 
 ### Cross Sections
 
-Make a channel cross section:
+Make channel cross sections from the default bankline polygon in the **sxchan** package, and add cross section features required for the Manning erosion engine. 
 
 ```{r}
-cs <- cross_section(15, grad = 0.02, d50 = 65, d84 = 100, roughness = 0.01)
-cs
+channel <- xt_generate_sxc(demo_bankline, n = 100) |> 
+  sx_manning(
+    grad = 0.02, d50 = 65, d84 = 100, 
+    roughness = seq(0.001, 0.01, length.out = 100)
+  )
 ```
 
-What's the largest flow that the channel can accommodate without eroding?
+Here is what they look like.
 
 ```{r}
-eroding_flow(cs)
+plot(demo_bankline)
+plot(st_geometry(channel), add = TRUE)
 ```
+
+
+What's the largest flow that the channel can accommodate without eroding? Visualize in a plot. 
+
+```{r}
+eroding_flow(channel, resistance = "manning") |> 
+  plot(ylab = "Flow", xlab = "Cross Section Number")
+```
+
+Or, the reverse can be calculated: what's the minimum channel width that can accommodate a flow without eroding? Try a flow of 200:
+
+```{r}
+min_channel <- min_stable_channel(channel, flow = 200, resistance = "manning")
+plot(demo_bankline)
+plot(st_geometry(min_channel), add = TRUE)
+```
+
 
 ### Hydrographs
 
@@ -88,7 +111,7 @@ hyd_snow(peak = 200, baseflow = 50) |>
 You can easily discretize the hydrograph if you'd like to do manual calculations:
 
 ```{r}
-discretize_hydrograph(hg, 10)
+discretize_hydrograph(hg, niter = 10)
 ```
 
 ### Gravel-bed river bank erosion model
@@ -96,10 +119,19 @@ discretize_hydrograph(hg, 10)
 Let a hydrograph erode a channel using `gbem()`. That returns a gbem object encoding information about channel changes. Run `erode()` to execute the changes to get a new cross section:
 
 ```{r}
-h <- hyd_rain(eroding_flow(cs) * 4, eroding_flow(cs))
-g <- gbem(h, cross_section = cs)
-erode(g)
+q <- eroding_flow(channel, resistance = "manning")
+h <- hyd_rain(median(q) * 4, min(q) / 4)
+g <- gbem(h, channel, niter = 1000, resistance = "manning")
 ```
+
+Calculate the newly eroded channel, and visualize its cross sections:
+
+```{r}
+new_channel <- erode(g)
+plot(demo_bankline)
+plot(st_geometry(new_channel), add = TRUE)
+```
+
 
 ## Code of Conduct
 

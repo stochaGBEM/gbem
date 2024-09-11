@@ -1,57 +1,115 @@
 #' Gravel-Bed River Bank Erosion Model
 #'
-#' Runs the GBEM algorithm to determine erosion of a channel cross section
-#' from a supplied event hydrograph.
+#' Runs an event hydrograph through a channel and applies an erosion engine
+#' to determine lateral erosion.
 #'
 #' @param hydrograph Event hydrograph carried by the stream, with time units
-#' in hours.
-#' @param cross_section A `"cross_section"` object representing a stream's
-#' cross section.
-#' @param niter Number of iterations to run the algorithm over.
-#' @details The hydrograph is first discretized into `niter` constant flows,
-#' and the GBEM algorithm is iterated on those flows.
+#' in hours. See `hydrograph()`.
+#' @param sx Channel cross sections containing features needed by the
+#' erosion engine, such as created by the `sx()` functions such as
+#'`sx_ferguson()` or `sx_manning()`.
+#' @param niter Number of time chunks to discretize the hydrograph into.
+#' @param resistance Paradigm for modelling channel resistance; one of
+#' `"ferguson"` for using Ferguson's equation, or `"manning"` for Manning's
+#' equation.
+#' @details This algorithm implements one of two paradigms for modelling
+#' channel resistance.
+#'
+#' 1. **Manning's Equation**: FILL_THIS_IN
+#' 2. **Ferguson's Equation**: FILL_THIS_IN
+#'
+#' An error is thrown if the input `sx` channel does not have sufficiently
+#' described properties.
+#'
 #' @returns A list of the following components:
 #'
+#' - `sx`: The original cross section.
 #' - `dw_pred`: predicted widening.
 #' - `dw_const`: change in width constrained by transport capacity, the most
 #    important thing here.
 #' - `v_b`: transport capacity * time. Volume of transport that can be moved
-#'   by the river.
-#' - `cross_section`: The original cross section.
-#' - `event`: A discretized event hydrograph with erosion widths and volumes
-#' at each time step.
+#'   by the river. Matrix, with rows representing cross sections corresponding
+#'   to the rows of `sx`; columns are time steps.
+#' - `resistance`: the resistance paradigm used.
 #' @examples
-#' cs <- cross_section(9, grad = 0.02, d50 = 45, d84 = 90, roughness = 0.01)
-#' hg <- hyd_snow(15, baseflow = 5)
-#' g <- gbem(hg, cs)
-#' erode(g) # Erosion occurs
+#' library(sf)
+#' library(sxchan)
 #'
-#' ch_width(cs) <- 100
-#' erode(gbem(hg, cs)) # No erosion
+#' ## Set up the channel.
+#' cross_sections <- xt_generate_sxc(demo_bankline, n = 20)
+#' n <- length(cross_sections)
+#' channel <- sx_manning(
+#'   cross_sections, grad = 0.02, d50 = 45, d84 = 90,
+#'   roughness = append(rep(0.01, n / 2), rep(0.05, n / 2))
+#' )
+#'
+#' ## Create an event hydrograph.
+#' hg <- hyd_snow(200, baseflow = 20)
+#'
+#' ## Run the hydrograph through the channel, using Manning's method.
+#' demo_gbem <- gbem(hg, channel, niter = 100, resistance = "manning")
+#'
+#' ## Erode the channel
+#' (new_channel <- erode(demo_gbem)) # Erosion occurs
+#'
+#' plot(demo_bankline)
+#' plot(st_geometry(new_channel), add = TRUE, col = "blue")
+#'
+#' ## Run a smaller event through that does no erosion.
+#' q <- min(eroding_flow(channel, resistance = "manning"))
+#' hg2 <- hyd_rain(q / 2, baseflow = q / 10)
+#' demo_gbem2 <- gbem(hg2, channel, niter = 100, resistance = "manning")
+#' new_channel2 <- erode(demo_gbem2)
+#'
+#' ## No erosion:
+#' identical(st_geometry(channel), st_geometry(new_channel2))
 #' @export
-gbem <- function(hydrograph, cross_section, niter = 1000){
+gbem <- function(hydrograph, sx, niter = 1000,
+                 resistance = c("ferguson", "manning")) {
+  resistance <- rlang::arg_match(resistance)
+  nsx <- nrow(sx)
   event <- discretize_hydrograph(hydrograph, niter)
-  dt <- diff(event$time[1:2])
-  erosion <- numeric()
-  v_b <- numeric()
-  cs <- list(cross_section)
-  for (i in seq_len(niter)) {
-    gbem_ <- gbem0(event$flow[i], dt, cs[[i]])
-    erosion[i] <- gbem_$dw_const
-    v_b[i] <- gbem_$v_b
-    cs[[i + 1]] <- erode(gbem_)  #widen the channel
-  }
-  event$erosion <- erosion
-  event$v_b <- v_b
   peak <- max(event$flow)
-  dw_pred <- gbem0(peak, dt, cross_section)$dw_pred  #find
-  dw_const <- sum(erosion)
-  v_b <- sum(v_b)
-  list(
+  dt <- diff(event$time[1:2])
+  # Matrix ROWS are cross sections (i), COLUMNS are time (t).
+  erosion <- matrix(nrow = nsx, ncol = niter)
+  v_b <- matrix(nrow = nsx, ncol = niter)
+  w <- sxchan::xt_width(sf::st_geometry(sx))
+  if (resistance == "ferguson") {
+    stop("Ferguson not available yet.")
+  }
+  if (resistance == "manning") {
+    grad <- sx[["grad"]]
+    d84 <- sx[["d84"]]
+    d50 <- sx[["d50"]]
+    roughness <- sx[["roughness"]]
+    rootdepth <- sx[["rootdepth"]]
+    dw_pred <- numeric()
+    for (i in seq_len(nsx)) {
+      dw_pred[i] <- gbem0_manning(
+        peak, dt, width = w[i], grad = grad[i], d50 = d50[i],
+        d84 = d84[i], roughness = roughness[i], rootdepth = rootdepth[i]
+      )$dw_pred  #find
+      for (t in seq_len(niter)) {
+        current_flow <- event$flow[t]
+        gbem_ <- gbem0_manning(
+          current_flow, dt, width = w[i], grad = grad[i], d50 = d50[i],
+          d84 = d84[i], roughness = roughness[i], rootdepth = rootdepth[i]
+        )
+        erosion[i, t] <- gbem_$dw_const
+        v_b[i, t] <- gbem_$v_b
+        w[i] <- w[i] + gbem_$dw_const
+      }
+    }
+    dw_const <- apply(erosion, 1, sum)
+    v_b_total <- apply(v_b, 1, sum)
+  }
+  l <- list(
+    sx = sx,
     dw_pred = dw_pred,
     dw_const = dw_const,
     v_b = v_b,
-    cross_section = cross_section,
-    event = event
+    resistance = resistance
   )
+  new_gbem(l)
 }
