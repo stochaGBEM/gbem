@@ -35,13 +35,15 @@
 #' library(sxchan)
 #'
 #' ## Set up the channel.
-#' cross_sections <- xt_generate_sxc(demo_bankline, n = 10)
+#' cross_sections <- xt_generate_sxc(demo_bankline, n = 20)
+#' n <- length(cross_sections)
 #' channel <- sx_manning(
-#'   cross_sections, grad = 0.02, d50 = 45, d84 = 90, roughness = 0.01
+#'   cross_sections, grad = 0.02, d50 = 45, d84 = 90,
+#'   roughness = append(rep(0.01, n / 2), rep(0.05, n / 2))
 #' )
 #'
 #' ## Create an event hydrograph.
-#' hg <- hyd_snow(15, baseflow = 5)
+#' hg <- hyd_snow(200, baseflow = 20)
 #'
 #' ## Run the hydrograph through the channel, using Manning's method.
 #' demo_gbem <- gbem(hg, channel, niter = 100, resistance = "manning")
@@ -52,12 +54,14 @@
 #' plot(demo_bankline)
 #' plot(st_geometry(new_channel), add = TRUE, col = "blue")
 #'
-#' ## Run the event a second time through
-#' demo_gbem2 <- gbem(hg, new_channel, niter = 100, resistance = "manning")
+#' ## Run a smaller event through that does no erosion.
+#' q <- min(eroding_flow(channel, resistance = "manning"))
+#' hg2 <- hyd_rain(q / 2, baseflow = q / 10)
+#' demo_gbem2 <- gbem(hg2, channel, niter = 100, resistance = "manning")
 #' new_channel2 <- erode(demo_gbem2)
 #'
 #' ## No erosion:
-#' identical(st_geometry(new_channel), st_geometry(new_channel2))
+#' identical(st_geometry(channel), st_geometry(new_channel2))
 #' @export
 gbem <- function(hydrograph, sx, niter = 1000,
                  resistance = c("ferguson", "manning")) {

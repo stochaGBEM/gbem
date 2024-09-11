@@ -14,8 +14,11 @@ Authors@R:
     person("Jane", "Wang", email = "jwang@bgcengineering.ca",
            role = "ctb")
     )
-Description: The goal of gbem is to calculate erosion volumes expected 
-    at a river's cross section, given flow magnitude and duration. 
+Description: gbem contains bank erosion algorithms applicable to gravel bed
+    rivers. It allows for the creation of event hydrographs that are passed 
+    through a series of channel cross sections, for which erosion amounts
+    are calculated. A new eroded channel can thus be obtained, in the form
+    of updated cross sections. 
 License: CC BY-NC 4.0
 Suggests: 
     testthat (>= 3.0.0),
