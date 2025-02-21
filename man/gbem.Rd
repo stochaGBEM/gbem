@@ -4,7 +4,13 @@
 \alias{gbem}
 \title{Gravel-Bed River Bank Erosion Model}
 \usage{
-gbem(hydrograph, sx, niter = 1000, resistance = c("ferguson", "manning"))
+gbem(
+  hydrograph,
+  sx,
+  niter = 1000,
+  engine = c("manning-original", "manning-volume", "ferguson"),
+  side = c("both", "left", "right")
+)
 }
 \arguments{
 \item{hydrograph}{Event hydrograph carried by the stream, with time units
@@ -12,13 +18,23 @@ in hours. See \code{hydrograph()}.}
 
 \item{sx}{Channel cross sections containing features needed by the
 erosion engine, such as created by the \code{sx()} functions such as
-\code{sx_ferguson()} or \code{sx_manning()}.}
+\code{sx_ferguson()} or \code{sx_manning()}.
+If running the engine \code{"manning-volume"}, then \code{sx} needs to have
+a column named \code{xs2d} containing the two-dimensional cross section
+objects extended sufficiently far beyond the banks to accommodate
+erosion.}
 
 \item{niter}{Number of time chunks to discretize the hydrograph into.}
 
-\item{resistance}{Paradigm for modelling channel resistance; one of
-\code{"ferguson"} for using Ferguson's equation, or \code{"manning"} for Manning's
-equation.}
+\item{engine}{Paradigm for modelling channel resistance; one of
+\code{"ferguson"} for using Ferguson's equation,
+\code{"manning-original"} for Manning's equation (original algorithm on
+simplified channels), or
+\code{"manning-volume"} for Manning's equation on 2D cross sections.}
+
+\item{side}{Which side of the channel to erode? One of
+\code{"both"} (erode equally on both sides), \code{"left"}, or \code{"right"}
+(erode entirely on one side of the channel).}
 }
 \value{
 A list of the following components:
@@ -63,7 +79,7 @@ channel <- sx_manning(
 hg <- hyd_snow(200, baseflow = 20)
 
 ## Run the hydrograph through the channel, using Manning's method.
-demo_gbem <- gbem(hg, channel, niter = 100, resistance = "manning")
+demo_gbem <- gbem(hg, channel, niter = 100, engine = "manning-original")
 
 ## Erode the channel
 (new_channel <- erode(demo_gbem)) # Erosion occurs
@@ -72,9 +88,9 @@ plot(demo_bankline)
 plot(st_geometry(new_channel), add = TRUE, col = "blue")
 
 ## Run a smaller event through that does no erosion.
-q <- min(eroding_flow(channel, resistance = "manning"))
+q <- min(eroding_flow(channel, engine = "manning-original"))
 hg2 <- hyd_rain(q / 2, baseflow = q / 10)
-demo_gbem2 <- gbem(hg2, channel, niter = 100, resistance = "manning")
+demo_gbem2 <- gbem(hg2, channel, niter = 100, engine = "manning-original")
 new_channel2 <- erode(demo_gbem2)
 
 ## No erosion:

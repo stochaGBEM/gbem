@@ -5,7 +5,8 @@
 #'
 #' @param flow Discharge carried by the stream.
 #' @param duration Time for which flow acts on the stream channel (hrs).
-#' @param width Cross section width
+#' @param xs2d A single two-dimensional cross section object (doesn't
+#' contain information on stream properties like d50 or roughness).
 #' @inheritParams sx_manning
 #' @returns A list of the following components:
 #'
@@ -15,15 +16,13 @@
 #' - `v_b`: transport capacity * time. Volume of transport that can be moved
 #'   by the river.
 #' @seealso [erode()]
-gbem0_manning <- function(flow, duration, width, grad, d50, d84, roughness,
-                          rootdepth) {
+gbem0_manning_with_volume <- function(flow, duration, xs2d, grad, d50, d84, roughness,
+                          rootdepth, side) {
   stopifnot(length(flow) == 1)
   stopifnot(length(duration) == 1)
   # Step 0: get the cross section properties.
   n <- roughness
-  d84 <- d84
-  d50 <- d50
-  w <- width
+  w <- sxchan::xs_width(xs2d)
   S <- grad
   H <- rootdepth
   #step 1: calculate the critical threshold for channel widening
@@ -43,28 +42,24 @@ gbem0_manning <- function(flow, duration, width, grad, d50, d84, roughness,
     dw_pred <- W_stable - w
     q_b <- mean(c(find_q_b(d, n, d50, S), find_q_b(d_crit, n, d50, S)))
     v_b <- q_b * duration * hour_2_seconds
-    
+    xs2d_pred <- sxchan::widen(xs2d, dw_pred, side = side)
+
     #new code added by BCE
     vol_1 <- v_b * d_crit / tan(travel_angle * pi / 180)
-    
-    # dummy function to calculate the volume difference between original and 
-    # adjusted cross section, based on increase in width of dw_pred 
-    xs_vol <- function(section, dw_pred){
-      #section  the original cross section
-      vol <- runif(1, 1, 15)
-      return(vol)
-    }
-    
-    vol_2 <- xs_vol(1, dw_pred)
-    
+
+    # Calculate the volume difference between original and
+    # adjusted cross section, based on increase in width of dw_pred
+    vol_2 <- sxchan::get_eroded_area(xs2d, new_xs2d)
+
     if (vol_1 < vol_2) {
       dw_const <- dw_pred * vol_1 / vol_2
     } else {
       dw_const <- dw_pred
     }
-    
+    xs2d_const <- sxchan::widen(xs2d, dw_const, side = side)
+
     #dw_const <- min(c(dw_pred, v_b / tan(travel_angle * pi / 180)))
-    
+
     #important note: the relevant volume of transport is transport in the bank
     #zone.  We can define the width of the bank zone as having a width that is
     #proportional to the bank height using the travel angle for small landslides
@@ -75,6 +70,8 @@ gbem0_manning <- function(flow, duration, width, grad, d50, d84, roughness,
   list(
     dw_pred = dw_pred,
     dw_const = dw_const,
-    v_b = v_b
+    v_b = v_b,
+    xs2d_pred = xs2d_pred,
+    xs2d_const = xs2d_const
   )
 }

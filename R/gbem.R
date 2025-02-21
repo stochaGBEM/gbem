@@ -8,10 +8,19 @@
 #' @param sx Channel cross sections containing features needed by the
 #' erosion engine, such as created by the `sx()` functions such as
 #'`sx_ferguson()` or `sx_manning()`.
+#' If running the engine `"manning-volume"`, then `sx` needs to have
+#' a column named `xs2d` containing the two-dimensional cross section
+#' objects extended sufficiently far beyond the banks to accommodate
+#' erosion.
 #' @param niter Number of time chunks to discretize the hydrograph into.
-#' @param resistance Paradigm for modelling channel resistance; one of
-#' `"ferguson"` for using Ferguson's equation, or `"manning"` for Manning's
-#' equation.
+#' @param engine Paradigm for modelling channel resistance; one of
+#' `"ferguson"` for using Ferguson's equation,
+#' `"manning-original"` for Manning's equation (original algorithm on
+#' simplified channels), or
+#' `"manning-volume"` for Manning's equation on 2D cross sections.
+#' @param side Which side of the channel to erode? One of
+#' `"both"` (erode equally on both sides), `"left"`, or `"right"`
+#' (erode entirely on one side of the channel).
 #' @details This algorithm implements one of two paradigms for modelling
 #' channel resistance.
 #'
@@ -47,7 +56,7 @@
 #' hg <- hyd_snow(200, baseflow = 20)
 #'
 #' ## Run the hydrograph through the channel, using Manning's method.
-#' demo_gbem <- gbem(hg, channel, niter = 100, resistance = "manning")
+#' demo_gbem <- gbem(hg, channel, niter = 100, engine = "manning-original")
 #'
 #' ## Erode the channel
 #' (new_channel <- erode(demo_gbem)) # Erosion occurs
@@ -56,17 +65,19 @@
 #' plot(st_geometry(new_channel), add = TRUE, col = "blue")
 #'
 #' ## Run a smaller event through that does no erosion.
-#' q <- min(eroding_flow(channel, resistance = "manning"))
+#' q <- min(eroding_flow(channel, engine = "manning-original"))
 #' hg2 <- hyd_rain(q / 2, baseflow = q / 10)
-#' demo_gbem2 <- gbem(hg2, channel, niter = 100, resistance = "manning")
+#' demo_gbem2 <- gbem(hg2, channel, niter = 100, engine = "manning-original")
 #' new_channel2 <- erode(demo_gbem2)
 #'
 #' ## No erosion:
 #' identical(st_geometry(channel), st_geometry(new_channel2))
 #' @export
 gbem <- function(hydrograph, sx, niter = 1000,
-                 resistance = c("ferguson", "manning")) {
-  resistance <- rlang::arg_match(resistance)
+                 engine = c("manning-original", "manning-volume", "ferguson"),
+                 side = c("both", "left", "right")) {
+  engine <- rlang::arg_match(engine)
+  side <- rlang::arg_match(side)
   nsx <- nrow(sx)
   event <- discretize_hydrograph(hydrograph, niter)
   peak <- max(event$flow)
@@ -75,10 +86,16 @@ gbem <- function(hydrograph, sx, niter = 1000,
   erosion <- matrix(nrow = nsx, ncol = niter)
   v_b <- matrix(nrow = nsx, ncol = niter)
   w <- sxchan::xt_width(sf::st_geometry(sx))
-  if (resistance == "ferguson") {
+  if (engine == "ferguson") {
     stop("Ferguson not available yet.")
   }
-  if (resistance == "manning") {
+  if (engine == "manning-original") {
+    if (side != "both") {
+      stop(
+        "Sorry, the original Manning's method can only accept erosion ",
+        "occuring on both sides of the channel."
+      )
+    }
     grad <- sx[["grad"]]
     d84 <- sx[["d84"]]
     d50 <- sx[["d50"]]
@@ -89,7 +106,7 @@ gbem <- function(hydrograph, sx, niter = 1000,
       dw_pred[i] <- gbem0_manning(
         peak, dt, width = w[i], grad = grad[i], d50 = d50[i],
         d84 = d84[i], roughness = roughness[i], rootdepth = rootdepth[i]
-      )$dw_pred  #find
+      )$dw_pred
       for (t in seq_len(niter)) {
         current_flow <- event$flow[t]
         gbem_ <- gbem0_manning(
@@ -104,12 +121,42 @@ gbem <- function(hydrograph, sx, niter = 1000,
     dw_const <- apply(erosion, 1, sum)
     v_b_total <- apply(v_b, 1, sum)
   }
+  if (engine == "manning-volume") {
+    grad <- sx[["grad"]]
+    d84 <- sx[["d84"]]
+    d50 <- sx[["d50"]]
+    roughness <- sx[["roughness"]]
+    rootdepth <- sx[["rootdepth"]]
+    xs2d <- sx[["xs2d"]]
+    dw_pred <- numeric()
+    for (i in seq_len(nsx)) {
+      dw_pred[i] <- gbem0_manning_with_volume(
+        peak, dt, xs2d = xs2d[[i]], grad = grad[i], d50 = d50[i],
+        d84 = d84[i], roughness = roughness[i], rootdepth = rootdepth[i],
+        side = side
+      )$dw_pred
+      current_xs2d <- xs2d[[i]]
+      for (t in seq_len(niter)) {
+        current_flow <- event$flow[t]
+        gbem_ <- gbem0_manning_with_volume(
+          current_flow, dt, xs2d = current_xs2d, grad = grad[i], d50 = d50[i],
+          d84 = d84[i], roughness = roughness[i], rootdepth = rootdepth[i],
+          side = side
+        )
+        erosion[i, t] <- gbem_$dw_const
+        v_b[i, t] <- gbem_$v_b
+        current_xs2d <- gbem_$xs2d_const
+      }
+    }
+    dw_const <- apply(erosion, 1, sum)
+    v_b_total <- apply(v_b, 1, sum)
+  }
   l <- list(
     sx = sx,
     dw_pred = dw_pred,
     dw_const = dw_const,
     v_b = v_b,
-    resistance = resistance
+    engine = engine
   )
   new_gbem(l)
 }

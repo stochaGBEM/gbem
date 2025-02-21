@@ -9,13 +9,13 @@ min_stable_channel(sx, flow, resistance = c("ferguson", "manning"))
 \arguments{
 \item{sx}{Channel cross sections containing features needed by the
 erosion engine, such as created by the \code{sx()} functions such as
-\code{sx_ferguson()} or \code{sx_manning()}.}
+\code{sx_ferguson()} or \code{sx_manning()}.
+If running the engine \code{"manning-volume"}, then \code{sx} needs to have
+a column named \code{xs2d} containing the two-dimensional cross section
+objects extended sufficiently far beyond the banks to accommodate
+erosion.}
 
 \item{flow}{Discharge carried by the stream; single numeric.}
-
-\item{resistance}{Paradigm for modelling channel resistance; one of
-\code{"ferguson"} for using Ferguson's equation, or \code{"manning"} for Manning's
-equation.}
 }
 \value{
 The original \code{sx} channel object, with cross section widths
