@@ -76,6 +76,7 @@
 gbem <- function(hydrograph, sx, niter = 1000,
                  engine = c("manning-original", "manning-volume", "ferguson"),
                  side = c("both", "left", "right")) {
+  checkmate::assert_integerish(niter, 1, len = 1)
   engine <- rlang::arg_match(engine)
   side <- rlang::arg_match(side)
   nsx <- nrow(sx)
@@ -103,6 +104,7 @@ gbem <- function(hydrograph, sx, niter = 1000,
     rootdepth <- sx[["rootdepth"]]
     dw_pred <- numeric()
     for (i in seq_len(nsx)) {
+      cat(i, " ")
       dw_pred[i] <- gbem0_manning(
         peak, dt, width = w[i], grad = grad[i], d50 = d50[i],
         d84 = d84[i], roughness = roughness[i], rootdepth = rootdepth[i]
@@ -120,6 +122,7 @@ gbem <- function(hydrograph, sx, niter = 1000,
     }
     dw_const <- apply(erosion, 1, sum)
     v_b_total <- apply(v_b, 1, sum)
+    extras <- list()
   }
   if (engine == "manning-volume") {
     grad <- sx[["grad"]]
@@ -129,16 +132,20 @@ gbem <- function(hydrograph, sx, niter = 1000,
     rootdepth <- sx[["rootdepth"]]
     xs2d <- sx[["xs2d"]]
     dw_pred <- numeric()
+    xs2d_pred <- list()
+    xs2d_const <- list()
     for (i in seq_len(nsx)) {
-      dw_pred[i] <- gbem0_manning_with_volume(
+      gbem_pred <- gbem:::gbem0_manning_with_volume(
         peak, dt, xs2d = xs2d[[i]], grad = grad[i], d50 = d50[i],
         d84 = d84[i], roughness = roughness[i], rootdepth = rootdepth[i],
         side = side
-      )$dw_pred
+      )
+      dw_pred[i] <- gbem_pred$dw_pred
+      xs2d_pred[[i]] <- gbem_pred$xs2d_pred
       current_xs2d <- xs2d[[i]]
       for (t in seq_len(niter)) {
         current_flow <- event$flow[t]
-        gbem_ <- gbem0_manning_with_volume(
+        gbem_ <- gbem:::gbem0_manning_with_volume(
           current_flow, dt, xs2d = current_xs2d, grad = grad[i], d50 = d50[i],
           d84 = d84[i], roughness = roughness[i], rootdepth = rootdepth[i],
           side = side
@@ -147,16 +154,22 @@ gbem <- function(hydrograph, sx, niter = 1000,
         v_b[i, t] <- gbem_$v_b
         current_xs2d <- gbem_$xs2d_const
       }
+      xs2d_const[[i]] <- current_xs2d  #????
     }
     dw_const <- apply(erosion, 1, sum)
     v_b_total <- apply(v_b, 1, sum)
+    extras <- list(
+      xs2d_const = xs2d_const,
+      xs2d_pred = xs2d_pred
+    )
   }
-  l <- list(
+  l <- rlang::list2(
     sx = sx,
     dw_pred = dw_pred,
     dw_const = dw_const,
     v_b = v_b,
-    engine = engine
+    engine = engine,
+    !!!extras
   )
   new_gbem(l)
 }

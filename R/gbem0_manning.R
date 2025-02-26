@@ -17,8 +17,14 @@
 #' @seealso [erode()]
 gbem0_manning <- function(flow, duration, width, grad, d50, d84, roughness,
                           rootdepth) {
-  stopifnot(length(flow) == 1)
-  stopifnot(length(duration) == 1)
+  checkmate::assert_numeric(flow, 0, len = 1)
+  checkmate::assert_numeric(duration, 0, len = 1)
+  checkmate::assert_numeric(width, 0, len = 1)
+  checkmate::assert_numeric(grad, 0, len = 1)
+  checkmate::assert_numeric(d50, 0, len = 1)
+  checkmate::assert_numeric(d84, d50, len = 1)
+  checkmate::assert_numeric(roughness, 0, len = 1)
+  checkmate::assert_numeric(rootdepth, 0, len = 1)
   # Step 0: get the cross section properties.
   n <- roughness
   d84 <- d84

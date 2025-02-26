@@ -18,8 +18,14 @@
 #' @seealso [erode()]
 gbem0_manning_with_volume <- function(flow, duration, xs2d, grad, d50, d84, roughness,
                           rootdepth, side) {
-  stopifnot(length(flow) == 1)
-  stopifnot(length(duration) == 1)
+  checkmate::assert_numeric(flow, 0, len = 1)
+  checkmate::assert_numeric(duration, 0, len = 1)
+  checkmate::assert_numeric(grad, 0, len = 1)
+  checkmate::assert_numeric(d50, 0, len = 1)
+  checkmate::assert_numeric(d84, d50, len = 1)
+  checkmate::assert_numeric(roughness, 0, len = 1)
+  checkmate::assert_numeric(rootdepth, 0, len = 1)
+  checkmate::assert_character(side, len = 1)
   # Step 0: get the cross section properties.
   n <- roughness
   w <- sxchan::xs_width(xs2d)
@@ -37,6 +43,8 @@ gbem0_manning_with_volume <- function(flow, duration, xs2d, grad, d50, d84, roug
     dw_const <- 0
     q_b <- find_q_b(d, n, d50, S)
     v_b <- q_b * duration * hour_2_seconds
+    xs2d_pred <- xs2d
+    xs2d_const <- xs2d
   } else{
     W_stable <- flow / (d_crit * v_crit)
     dw_pred <- W_stable - w
@@ -49,14 +57,15 @@ gbem0_manning_with_volume <- function(flow, duration, xs2d, grad, d50, d84, roug
 
     # Calculate the volume difference between original and
     # adjusted cross section, based on increase in width of dw_pred
-    vol_2 <- sxchan::get_eroded_area(xs2d, new_xs2d)
+    vol_2 <- sxchan::get_eroded_area(xs2d, xs2d_pred)
 
     if (vol_1 < vol_2) {
       dw_const <- dw_pred * vol_1 / vol_2
+      xs2d_const <- sxchan::widen(xs2d, dw_const, side = side)
     } else {
       dw_const <- dw_pred
+      xs2d_const <- xs2d_pred
     }
-    xs2d_const <- sxchan::widen(xs2d, dw_const, side = side)
 
     #dw_const <- min(c(dw_pred, v_b / tan(travel_angle * pi / 180)))
 
