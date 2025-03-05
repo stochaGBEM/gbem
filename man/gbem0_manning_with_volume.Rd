@@ -8,6 +8,7 @@ gbem0_manning_with_volume(
   flow,
   duration,
   xs2d,
+  w,
   grad,
   d50,
   d84,
@@ -24,6 +25,9 @@ gbem0_manning_with_volume(
 \item{xs2d}{A single two-dimensional cross section object (doesn't
 contain information on stream properties like d50 or roughness).}
 
+\item{w}{Active width. This is the bank-to-bank width, excluding
+vegetated islands.}
+
 \item{grad}{Channel gradient at the cross section.}
 
 \item{d50, d84}{Grain size distribution quantities (50th and 84th percentile).}
@@ -35,7 +39,7 @@ contain information on stream properties like d50 or roughness).}
 \value{
 A list of the following components:
 \itemize{
-\item \code{dw_pred}: predicted widening.
+\item \code{dw_max}: maximum widening.
 \item \code{dw_const}: change in width constrained by transport capacity, the most
 \item \code{v_b}: transport capacity * time. Volume of transport that can be moved
 by the river.

@@ -9,7 +9,8 @@ gbem(
   sx,
   niter = 1000,
   engine = c("manning-original", "manning-volume", "ferguson"),
-  side = c("both", "left", "right")
+  side = c("both", "left", "right"),
+  keep_movie = FALSE
 )
 }
 \arguments{
@@ -35,12 +36,17 @@ simplified channels), or
 \item{side}{Which side of the channel to erode? One of
 \code{"both"} (erode equally on both sides), \code{"left"}, or \code{"right"}
 (erode entirely on one side of the channel).}
+
+\item{keep_movie}{Logical; keep all intermediate points? Only applies
+to the constrained \code{const} outputs and for \verb{"manning-volume}" engine.
+I'll probably remove this argument later because the output size can
+become massive, but for now it's good for model exploration.}
 }
 \value{
 A list of the following components:
 \itemize{
 \item \code{sx}: The original cross section.
-\item \code{dw_pred}: predicted widening.
+\item \code{dw_max}: maximum widening.
 \item \code{dw_const}: change in width constrained by transport capacity, the most
 \item \code{v_b}: transport capacity * time. Volume of transport that can be moved
 by the river. Matrix, with rows representing cross sections corresponding

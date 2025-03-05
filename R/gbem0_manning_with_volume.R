@@ -4,31 +4,40 @@
 #' changes for a constant flow over a small duration.
 #'
 #' @param flow Discharge carried by the stream.
+#' @param w Active width. This is the bank-to-bank width, excluding
+#' vegetated islands.
 #' @param duration Time for which flow acts on the stream channel (hrs).
 #' @param xs2d A single two-dimensional cross section object (doesn't
 #' contain information on stream properties like d50 or roughness).
 #' @inheritParams sx_manning
 #' @returns A list of the following components:
 #'
-#' - `dw_pred`: predicted widening.
+#' - `dw_max`: maximum widening.
 #' - `dw_const`: change in width constrained by transport capacity, the most
 #    important thing here.
 #' - `v_b`: transport capacity * time. Volume of transport that can be moved
 #'   by the river.
 #' @seealso [erode()]
-gbem0_manning_with_volume <- function(flow, duration, xs2d, grad, d50, d84, roughness,
+gbem0_manning_with_volume <- function(flow, duration, xs2d, w, grad, d50, d84, roughness,
                           rootdepth, side) {
   checkmate::assert_numeric(flow, 0, len = 1)
   checkmate::assert_numeric(duration, 0, len = 1)
   checkmate::assert_numeric(grad, 0, len = 1)
   checkmate::assert_numeric(d50, 0, len = 1)
   checkmate::assert_numeric(d84, d50, len = 1)
+  checkmate::assert_numeric(w, 0, len = 1)
   checkmate::assert_numeric(roughness, 0, len = 1)
   checkmate::assert_numeric(rootdepth, 0, len = 1)
   checkmate::assert_character(side, len = 1)
+  if (side == "left") {
+    prop_left <- 1
+  } else if (side == "right") {
+    prop_left <- 0
+  } else {
+    prop_left <- 0.5
+  }
   # Step 0: get the cross section properties.
   n <- roughness
-  w <- sxchan::xs_width(xs2d)
   S <- grad
   H <- rootdepth
   #step 1: calculate the critical threshold for channel widening
@@ -39,35 +48,41 @@ gbem0_manning_with_volume <- function(flow, duration, xs2d, grad, d50, d84, roug
   d <- ((n * flow) / (w * sqrt(S)))^(3 / 5)
   stable <- d < d_crit
   if (stable) {
-    dw_pred <- 0
+    dw_max <- 0
     dw_const <- 0
     q_b <- find_q_b(d, n, d50, S)
     v_b <- q_b * duration * hour_2_seconds
-    xs2d_pred <- xs2d
+    xs2d_max <- xs2d
     xs2d_const <- xs2d
   } else{
     W_stable <- flow / (d_crit * v_crit)
-    dw_pred <- W_stable - w
+    dw_max <- W_stable - w
     q_b <- mean(c(find_q_b(d, n, d50, S), find_q_b(d_crit, n, d50, S)))
     v_b <- q_b * duration * hour_2_seconds
-    xs2d_pred <- sxchan::widen(xs2d, dw_pred, side = side)
+    # xs2d_max <- sxchan::xt_widen_2d(xs2d, dw_max, prop_left = prop_left)
 
     #new code added by BCE
     vol_1 <- v_b * d_crit / tan(travel_angle * pi / 180)
 
     # Calculate the volume difference between original and
-    # adjusted cross section, based on increase in width of dw_pred
-    vol_2 <- sxchan::get_eroded_area(xs2d, xs2d_pred)
+    # adjusted cross section, based on increase in width of dw_max
+    vol_2 <- sxchan::xt_erosion_volume(
+      xs2d, dw_max,
+      prop_left = prop_left, error_on_overflow = FALSE
+    )
 
     if (vol_1 < vol_2) {
-      dw_const <- dw_pred * vol_1 / vol_2
-      xs2d_const <- sxchan::widen(xs2d, dw_const, side = side)
+      dw_const <- dw_max * vol_1 / vol_2
+    } else if (attr(vol_2, "censored")) {
+      stop(
+        "Can't determine if vol_1 < vol_2 due to censored vol_2."
+      )
     } else {
-      dw_const <- dw_pred
-      xs2d_const <- xs2d_pred
+      dw_const <- dw_max
     }
+    xs2d_const <- sxchan::xt_widen_2d(xs2d, dw_const, prop_left = prop_left)
 
-    #dw_const <- min(c(dw_pred, v_b / tan(travel_angle * pi / 180)))
+    #dw_const <- min(c(dw_max, v_b / tan(travel_angle * pi / 180)))
 
     #important note: the relevant volume of transport is transport in the bank
     #zone.  We can define the width of the bank zone as having a width that is
@@ -77,10 +92,10 @@ gbem0_manning_with_volume <- function(flow, duration, xs2d, grad, d50, d84, roug
     #height so dw = v_b / tan(travel_angle)
   }
   list(
-    dw_pred = dw_pred,
+    dw_max = dw_max,
     dw_const = dw_const,
     v_b = v_b,
-    xs2d_pred = xs2d_pred,
+    # xs2d_max = xs2d_max,
     xs2d_const = xs2d_const
   )
 }
