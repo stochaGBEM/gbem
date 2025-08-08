@@ -71,12 +71,12 @@ gbem0_manning_with_volume <- function(flow, duration, xs2d, w, grad, d50, d84, r
       prop_left = prop_left, error_on_overflow = FALSE
     )
 
-    if (vol_1 < vol_2) {
-      dw_const <- dw_max * vol_1 / vol_2
-    } else if (attr(vol_2, "censored")) {
+    if (attr(vol_2, "censored")) {
       stop(
         "Can't determine if vol_1 < vol_2 due to censored vol_2."
       )
+    } else if (vol_1 < vol_2) {
+      dw_const <- dw_max * vol_1 / vol_2
     } else {
       dw_const <- dw_max
     }
