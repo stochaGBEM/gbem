@@ -55,32 +55,21 @@ gbem0_manning_with_volume <- function(flow, duration, xs2d, w, grad, d50, d84, r
     xs2d_max <- xs2d
     xs2d_const <- xs2d
   } else{
-    W_stable <- flow / (d_crit * v_crit)
-    dw_max <- W_stable - w
+    # Constrained erosion
     q_b <- mean(c(find_q_b(d, n, d50, S), find_q_b(d_crit, n, d50, S)))
     v_b <- q_b * duration * hour_2_seconds
-    # xs2d_max <- sxchan::xt_widen_2d(xs2d, dw_max, prop_left = prop_left)
-
-    #new code added by BCE
     vol_1 <- v_b * d_crit / tan(travel_angle * pi / 180)
+    new_cross_section <- sxchan::xt_widen(xs2d, volume = vol_1, side = side)
+    new_width <- sxchan::xt_width(new_cross_section)
+    dw_const <- new_width - w
 
-    # Calculate the volume difference between original and
-    # adjusted cross section, based on increase in width of dw_max
+    # Maximum erosion at this flow
+    W_stable <- flow / (d_crit * v_crit)
+    dw_max <- W_stable - w
     vol_2 <- sxchan::xt_erosion_volume(
       xs2d, dw_max,
       prop_left = prop_left, error_on_overflow = FALSE
     )
-
-    if (attr(vol_2, "censored")) {
-      stop(
-        "Can't determine if vol_1 < vol_2 due to censored vol_2."
-      )
-    } else if (vol_1 < vol_2) {
-      dw_const <- dw_max * vol_1 / vol_2
-    } else {
-      dw_const <- dw_max
-    }
-    xs2d_const <- sxchan::xt_widen_2d(xs2d, dw_const, prop_left = prop_left)
 
     #dw_const <- min(c(dw_max, v_b / tan(travel_angle * pi / 180)))
 
@@ -96,6 +85,6 @@ gbem0_manning_with_volume <- function(flow, duration, xs2d, w, grad, d50, d84, r
     dw_const = dw_const,
     v_b = v_b,
     # xs2d_max = xs2d_max,
-    xs2d_const = xs2d_const
+    xs2d_const = new_cross_section
   )
 }
